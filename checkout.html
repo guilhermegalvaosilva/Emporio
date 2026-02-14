@@ -1,0 +1,1388 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout | BioVida</title>
+    <link rel="stylesheet" href="/frontend/style.css" />
+
+    <style>
+      :root {
+        --ink: #0f0f10;
+        --muted: rgba(0, 0, 0, 0.62);
+        --line: rgba(0, 0, 0, 0.1);
+        --soft: #f5f5f5;
+        --green: #1e7a34;
+      }
+      * {
+        box-sizing: border-box;
+        border-radius: 0 !important;
+      }
+      body {
+        margin: 0;
+        background: #fff;
+        color: var(--ink);
+      }
+      a {
+        color: inherit;
+      }
+
+      .page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 16px 90px;
+      }
+
+      .head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 18px 0;
+        border-bottom: 1px solid var(--line);
+        margin-bottom: 18px;
+      }
+      .head h1 {
+        margin: 0;
+        font-size: 26px;
+        font-weight: 900;
+      }
+      .head p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-weight: 700;
+        font-size: 13px;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 18px;
+        align-items: start;
+      }
+      @media (max-width: 980px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        background: #fff;
+        padding: 16px;
+      }
+      .panel__title {
+        margin: 0 0 12px;
+        font-size: 14px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .item {
+        display: grid;
+        grid-template-columns: 64px 1fr auto;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 0;
+        border-top: 1px solid var(--line);
+      }
+      .item:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .item__img {
+        width: 64px;
+        height: 64px;
+        object-fit: contain;
+        background: var(--soft);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+      }
+      .item__name {
+        margin: 0 0 4px;
+        font-weight: 900;
+        font-size: 13px;
+      }
+      .item__meta {
+        margin: 0;
+        color: var(--muted);
+        font-weight: 700;
+        font-size: 12px;
+      }
+      .item__right {
+        text-align: right;
+      }
+      .item__price {
+        font-weight: 900;
+        color: var(--green);
+      }
+
+      .qty {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        margin-top: 8px;
+      }
+      .qty button {
+        width: 34px;
+        height: 34px;
+        border: 1px solid var(--line);
+        background: #fff;
+        font-weight: 900;
+        cursor: pointer;
+      }
+      .qty span {
+        min-width: 22px;
+        text-align: center;
+        font-weight: 900;
+      }
+
+      .remove {
+        margin-top: 8px;
+        border: 1px solid var(--line);
+        background: #fff;
+        padding: 8px 10px;
+        font-weight: 900;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      .totals {
+        border-top: 1px solid var(--line);
+        margin-top: 12px;
+        padding-top: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-weight: 900;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .row small {
+        color: var(--muted);
+        font-weight: 800;
+      }
+      .row .neg {
+        color: #b00020;
+      }
+
+      .form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .form .full {
+        grid-column: 1 / -1;
+      }
+
+      .field label {
+        display: block;
+        font-size: 12px;
+        font-weight: 900;
+        color: rgba(0, 0, 0, 0.75);
+        margin-bottom: 6px;
+      }
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        padding: 12px;
+        font-size: 14px;
+        outline: 0;
+        background: #fff;
+      }
+      .field textarea {
+        min-height: 90px;
+        resize: vertical;
+      }
+
+      .btn {
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--ink);
+        padding: 12px 14px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+      .btn--primary {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: #fff;
+      }
+      .btn:hover {
+        opacity: 0.92;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .actions .btn {
+        flex: 1;
+      }
+
+      .empty {
+        border: 1px dashed var(--line);
+        padding: 14px;
+        text-align: center;
+        color: var(--muted);
+        font-weight: 800;
+      }
+
+      .loading {
+        opacity: 0.7;
+        pointer-events: none;
+      }
+
+      /* ✅ CUPOM */
+      .couponBox {
+        border: 1px solid var(--line);
+        padding: 12px;
+        background: #fff;
+      }
+      .couponTop {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .couponHint {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--muted);
+      }
+      .couponRow {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        align-items: center;
+      }
+      @media (max-width: 420px) {
+        .couponRow {
+          grid-template-columns: 1fr;
+        }
+      }
+      .couponRow input {
+        height: 44px;
+        letter-spacing: 0.02em;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+      .couponBtn {
+        height: 44px;
+        min-width: 120px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border: 1px solid var(--line);
+        font-size: 12px;
+        font-weight: 900;
+      }
+      .badge--ok {
+        border-color: rgba(30, 122, 52, 0.35);
+        color: var(--green);
+        background: rgba(30, 122, 52, 0.06);
+      }
+      .badge--err {
+        border-color: rgba(176, 0, 32, 0.35);
+        color: #b00020;
+        background: rgba(176, 0, 32, 0.06);
+      }
+      .badge--info {
+        border-color: rgba(0, 0, 0, 0.12);
+        color: rgba(0, 0, 0, 0.72);
+        background: rgba(0, 0, 0, 0.03);
+      }
+
+      /* ✅ PIX BOX */
+      .pixRow {
+        display: grid;
+        grid-template-columns: 1fr 220px;
+        gap: 12px;
+        align-items: start;
+      }
+      @media (max-width: 520px) {
+        .pixRow {
+          grid-template-columns: 1fr;
+        }
+      }
+      .pixQr {
+        width: 220px;
+        height: 220px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: #fff;
+        object-fit: contain;
+      }
+      .pixMeta {
+        color: rgba(0, 0, 0, 0.62);
+        line-height: 1.6;
+      }
+      .pixKeyLine {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .pixCopyRow {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+      .mono {
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+        font-size: 11px;
+        line-height: 1.5;
+        color: rgba(0, 0, 0, 0.75);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        padding: 10px;
+        background: #fff;
+        word-break: break-all;
+      }
+
+      /* ✅ FOOTER PREMIUM */
+      .footer {
+        background: #0b0c0f;
+        color: rgba(255, 255, 255, 0.92);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .footer__wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 34px 16px 18px;
+      }
+
+      .footerTop {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        margin-bottom: 18px;
+      }
+      @media (max-width: 860px) {
+        .footerTop {
+          flex-direction: column;
+          align-items: stretch;
+        }
+      }
+      .footerTop__left {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .footerTop__title {
+        margin: 0;
+        font-weight: 900;
+        letter-spacing: 0.02em;
+        font-size: 14px;
+      }
+      .footerTop__sub {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.72);
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 1.7;
+      }
+      .footerTop__actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      @media (max-width: 860px) {
+        .footerTop__actions {
+          justify-content: flex-start;
+          width: 100%;
+        }
+      }
+      .footerCta {
+        text-decoration: none;
+        font-weight: 900;
+        font-size: 12px;
+        padding: 10px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: transparent;
+        color: rgba(255, 255, 255, 0.92);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .footerCta--solid {
+        background: rgba(255, 255, 255, 0.92);
+        color: #0b0c0f;
+        border-color: rgba(255, 255, 255, 0.92);
+      }
+      .footerCta:hover {
+        opacity: 0.92;
+      }
+      .ico {
+        width: 16px;
+        height: 16px;
+        flex: 0 0 auto;
+        opacity: 0.95;
+      }
+
+      .footerBadges {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 10px 0 18px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        margin-bottom: 18px;
+      }
+      .footerBadge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.03);
+        font-weight: 900;
+        font-size: 12px;
+        letter-spacing: 0.02em;
+        color: rgba(255, 255, 255, 0.92);
+      }
+      .footerGrid {
+        display: grid;
+        grid-template-columns: 1.25fr 0.95fr 0.95fr;
+        gap: 18px;
+        align-items: start;
+      }
+      @media (max-width: 980px) {
+        .footerGrid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .footer__brand {
+        margin: 0 0 10px;
+        font-weight: 900;
+        font-size: 16px;
+        letter-spacing: 0.06em;
+      }
+      .footer__muted {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.72);
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 1.85;
+      }
+      .footer__title {
+        margin: 0 0 10px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+      .footer__links {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .footer__link {
+        text-decoration: none;
+        font-weight: 900;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        padding: 10px 12px;
+        width: fit-content;
+        background: transparent;
+      }
+      .footer__link:hover {
+        opacity: 0.92;
+      }
+
+      .footerBottom {
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .footerBottom small {
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 700;
+      }
+      .footerLegal {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .footerLegal a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        font-weight: 800;
+        font-size: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+      }
+      .footerLegal a:hover {
+        opacity: 0.9;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="nav">
+      <div class="nav__wrap">
+        <nav class="nav__side nav__side--left">
+          <a href="/index.html" class="nav__link">HOME</a>
+          <a href="/frontend/mais-vendidos.html" class="nav__link">PRODUTOS</a>
+        </nav>
+
+        <a
+          href="/frontend/index.html"
+          class="brand"
+          aria-label="Empório BioVida"
+        >
+          <span class="brand__emp">EMPÓRIO</span>
+          <span class="brand__name"
+            ><span class="brand__bio">Bio</span
+            ><span class="brand__vida">Vida</span></span
+          >
+          <span class="brand__sub">PRODUTOS NATURAIS</span>
+        </a>
+
+        <nav class="nav__side nav__side--right">
+          <a href="/frontend/sobre.html" class="nav__link">SOBRE</a>
+          <a href="#" class="nav__link">CONTATO</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="head">
+        <div>
+          <h1>Checkout</h1>
+          <p>Revise seu carrinho e finalize seu pedido.</p>
+        </div>
+
+        <a
+          href="/frontend/mais-vendidos.html"
+          style="
+            font-weight: 900;
+            text-decoration: none;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 10px 12px;
+          "
+          >Voltar aos produtos</a
+        >
+      </div>
+
+      <div class="layout">
+        <section class="panel" aria-label="Resumo do carrinho">
+          <h2 class="panel__title">Seu carrinho</h2>
+          <div id="cartList"></div>
+
+          <div class="totals">
+            <div class="row">
+              <small>Subtotal</small><span id="subtotal">R$ 0,00</span>
+            </div>
+            <div class="row">
+              <small>Frete</small><span id="shipping">R$ 0,00</span>
+            </div>
+            <div class="row">
+              <small>Desconto</small
+              ><span id="discount" class="neg">- R$ 0,00</span>
+            </div>
+            <div class="row">
+              <small>Total</small
+              ><span id="total" style="color: var(--green)">R$ 0,00</span>
+            </div>
+          </div>
+        </section>
+
+        <aside class="panel" aria-label="Dados do pedido">
+          <h2 class="panel__title">Seus dados</h2>
+
+          <form id="checkoutForm" class="form">
+            <div class="field full">
+              <label for="name">Nome</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Seu nome"
+                required
+              />
+            </div>
+
+            <div class="field full">
+              <label for="email">E-mail</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="seuemail@exemplo.com"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="phone">WhatsApp</label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="(61) 9xxxx-xxxx"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="method">Recebimento</label>
+              <select id="method" name="method" required>
+                <option value="Entrega">Entrega</option>
+                <option value="Retirada">Retirada</option>
+              </select>
+            </div>
+
+            <div class="field full">
+              <label for="address">Endereço (se entrega)</label>
+              <input
+                id="address"
+                name="address"
+                type="text"
+                placeholder="Rua, nº, bairro, cidade"
+              />
+            </div>
+
+            <div class="field full">
+              <label for="shippingZone">Região de entrega</label>
+              <select id="shippingZone" name="shippingZone">
+                <option value="Plano Piloto">Plano Piloto (Free)</option>
+                <option value="Asa Sul / Asa Norte">
+                  Asa Sul / Asa Norte (Free)
+                </option>
+                <option value="Águas Claras">Águas Claras (Free)</option>
+                <option value="Taguatinga">Taguatinga (Free)</option>
+                <option value="Outras regiões">
+                  Outras regiões (R$ 20,00)
+                </option>
+              </select>
+            </div>
+
+            <div class="field full">
+              <label for="payment">Pagamento</label>
+              <select id="payment" name="payment" required>
+                <option value="Pix (Manual)">Pix</option>
+              </select>
+
+              <div
+                id="pixManualBox"
+                style="
+                  border: 1px solid rgba(0, 0, 0, 0.1);
+                  padding: 12px;
+                  margin-top: 10px;
+                  font-weight: 800;
+                  font-size: 12px;
+                  color: rgba(0, 0, 0, 0.75);
+                "
+              >
+                <div style="font-weight: 900; margin-bottom: 10px">
+                  Pix (QR Code)
+                </div>
+
+                <div class="pixRow">
+                  <div>
+                    <div class="pixKeyLine" style="margin-bottom: 10px">
+                      <span>Chave Pix:</span>
+                      <span id="pixKeyText" style="font-weight: 900"
+                        >46792469874</span
+                      >
+                      <button
+                        class="btn"
+                        type="button"
+                        id="copyPixKeyBtn"
+                        style="padding: 10px 12px"
+                      >
+                        Copiar chave
+                      </button>
+                    </div>
+
+                    <div class="pixMeta">
+                      <div style="margin-bottom: 6px">
+                        Valor do pedido:
+                        <span id="pixAmountText" style="font-weight: 900"
+                          >R$ 0,00</span
+                        >
+                      </div>
+                      <div>Escaneie o QR com o app do seu banco.</div>
+                    </div>
+
+                    <div class="pixCopyRow">
+                      <button class="btn" type="button" id="copyPixEMVBtn">
+                        Copiar Pix (copia e cola)
+                      </button>
+                    </div>
+
+                    <div
+                      id="pixEmvText"
+                      class="mono"
+                      style="margin-top: 10px; display: none"
+                    ></div>
+
+                    <div class="pixMeta" style="margin-top: 10px">
+                      Após o pagamento, envie o comprovante pelo WhatsApp para
+                      confirmarmos seu pedido.
+                    </div>
+                  </div>
+
+                  <div>
+                    <img
+                      id="pixQrImg"
+                      class="pixQr"
+                      alt="QR Code do Pix"
+                      src=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field full">
+              <label for="coupon">Cupom</label>
+              <div class="couponBox">
+                <div class="couponTop">
+                  <div class="couponHint">Digite e clique em aplicar</div>
+                  <div
+                    id="couponMsg"
+                    class="badge badge--info"
+                    style="display: none"
+                  ></div>
+                </div>
+
+                <div class="couponRow">
+                  <input
+                    id="coupon"
+                    type="text"
+                    placeholder="Ex.: BIO10 ou FRETEGRATIS"
+                    autocomplete="off"
+                    inputmode="text"
+                  />
+                  <button class="btn couponBtn" id="applyCoupon" type="button">
+                    Aplicar
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="field full">
+              <label for="notes">Observações</label>
+              <textarea
+                id="notes"
+                name="notes"
+                placeholder="Ex.: horário, ponto de referência, sem substituições..."
+              ></textarea>
+            </div>
+
+            <div class="actions full">
+              <button class="btn btn--primary" id="payBtn" type="submit">
+                Pagar agora (WhatsApp)
+              </button>
+              <button class="btn" type="button" id="clearCart">
+                Limpar carrinho
+              </button>
+            </div>
+          </form>
+        </aside>
+      </div>
+    </main>
+
+    <!-- ✅ FOOTER PREMIUM -->
+    <footer class="footer" aria-label="Rodapé">
+      <div class="footer__wrap">
+        <div class="footerTop" aria-label="Atalho de atendimento">
+          <div class="footerTop__left">
+            <p class="footerTop__title">Precisa de ajuda para finalizar?</p>
+            <p class="footerTop__sub">
+              Atendimento rápido no WhatsApp e confirmação do pedido após o Pix.
+            </p>
+          </div>
+
+          <div class="footerTop__actions">
+            <a
+              class="footerCta footerCta--solid"
+              href="https://wa.me/5561995289436"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg class="ico" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M21 16.5a4.5 4.5 0 0 1-4.5 4.5H8l-5 2 2-5V7.5A4.5 4.5 0 0 1 9.5 3H16.5A4.5 4.5 0 0 1 21 7.5v9Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+              </svg>
+              Chamar no WhatsApp
+            </a>
+
+            <a class="footerCta" href="/frontend/mais-vendidos.html">
+              <svg class="ico" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M7 7h14v14H7V7Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M3 3h14v14H3V3Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+              </svg>
+              Ver produtos
+            </a>
+          </div>
+        </div>
+
+        <div class="footerBadges" aria-label="Benefícios">
+          <div class="footerBadge">
+            <svg class="ico" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M7 10.5 11 14.5 17 8.5"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+            </svg>
+            Pix (QR + Copia e Cola)
+          </div>
+
+          <div class="footerBadge">
+            <svg class="ico" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M3 7h14l4 5v5H5l-2-5V7Z"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M7 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path d="M3 7V4h4" stroke="currentColor" stroke-width="2" />
+            </svg>
+            Entrega em Brasília-DF
+          </div>
+
+          <div class="footerBadge">
+            <svg class="ico" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 21s8-4.5 8-11a8 8 0 0 0-16 0c0 6.5 8 11 8 11Z"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M8.5 11.5c3 0 4-3 7-3"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+            </svg>
+            Produtos naturais selecionados
+          </div>
+        </div>
+
+        <div class="footerGrid">
+          <div>
+            <p class="footer__brand">Empório BioVida</p>
+            <p class="footer__muted" id="footerInfo"></p>
+          </div>
+
+          <div>
+            <p class="footer__title">Navegação</p>
+            <div class="footer__links">
+              <a class="footer__link" href="/frontend/index.html">Home</a>
+              <a class="footer__link" href="/frontend/mais-vendidos.html"
+                >Produtos</a
+              >
+              <a class="footer__link" href="/frontend/sobre.html">Sobre</a>
+            </div>
+          </div>
+
+          <div>
+            <p class="footer__title">Informações</p>
+            <p class="footer__muted">
+              Pagamento via Pix (QR Code). Após pagar, envie o comprovante no
+              WhatsApp.<br />
+              Frete: grátis nas regiões listadas e R$ 20,00 para “Outras
+              regiões”.
+            </p>
+          </div>
+        </div>
+
+        <div class="footerBottom">
+          <small
+            >© <span id="footerYear"></span> Empório BioVida. Todos os direitos
+            reservados.</small
+          >
+          <div class="footerLegal">
+            <a href="#" aria-label="Política de Privacidade">Privacidade</a>
+            <a href="#" aria-label="Termos de Uso">Termos</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const storageKey = "biovida_cart_v1";
+      const STORE_WHATSAPP = "5561995289436";
+      const PIX_KEY = "46792469874";
+
+      const PIX_MERCHANT_NAME = "EMPORIO BIOVIDA";
+      const PIX_MERCHANT_CITY = "BRASILIA";
+
+      // ✅ Footer editável (premium)
+      const FOOTER_ADDRESS_LINE = "Produtos naturais • Brasília-DF";
+      const FOOTER_HOURS = "Seg–Sáb: 09:00–19:00 • Dom: 10:00–14:00";
+
+      const SHIPPING_TABLE = {
+        "Plano Piloto": 0,
+        "Asa Sul / Asa Norte": 0,
+        "Águas Claras": 0,
+        Taguatinga: 0,
+        "Outras regiões": 20,
+      };
+
+      const COUPONS = {
+        BIO10: { type: "percent", value: 10 },
+        FRETEGRATIS: { type: "shipping", value: 100 },
+      };
+
+      const fmt = (n) =>
+        n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+      function onlyDigits(v) {
+        return (v || "").replace(/\D/g, "");
+      }
+      function maskBRPhone(v) {
+        const d = onlyDigits(v).slice(0, 11);
+        const ddd = d.slice(0, 2);
+        const nine = d.slice(2, 3);
+        const p1 = d.slice(3, 7);
+        const p2 = d.slice(7, 11);
+
+        if (d.length <= 2) return ddd ? `(${ddd}` : "";
+        if (d.length <= 3) return `(${ddd}) ${nine}`;
+        if (d.length <= 7) return `(${ddd}) ${nine}${p1 ? ` ${p1}` : ""}`;
+        return `(${ddd}) ${nine} ${p1}-${p2}`;
+      }
+
+      function lineItemsText(items) {
+        return items
+          .map((it) => `• ${it.qty}x ${it.name} — ${fmt(it.price * it.qty)}`)
+          .join("\n");
+      }
+
+      function openWhatsApp(text) {
+        const url = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(text)}`;
+        window.open(url, "_blank", "noopener,noreferrer");
+      }
+
+      const loadCart = () => {
+        try {
+          return JSON.parse(localStorage.getItem(storageKey)) || {};
+        } catch {
+          return {};
+        }
+      };
+      const saveCart = (cart) =>
+        localStorage.setItem(storageKey, JSON.stringify(cart));
+
+      let cart = loadCart();
+
+      const cartList = document.getElementById("cartList");
+      const subtotalEl = document.getElementById("subtotal");
+      const shippingEl = document.getElementById("shipping");
+      const discountEl = document.getElementById("discount");
+      const totalEl = document.getElementById("total");
+
+      const form = document.getElementById("checkoutForm");
+      const methodEl = document.getElementById("method");
+      const addressEl = document.getElementById("address");
+      const zoneEl = document.getElementById("shippingZone");
+
+      const couponInput = document.getElementById("coupon");
+      const applyCouponBtn = document.getElementById("applyCoupon");
+      const couponMsg = document.getElementById("couponMsg");
+
+      const clearCartBtn = document.getElementById("clearCart");
+      const payBtn = document.getElementById("payBtn");
+      const phoneEl = document.getElementById("phone");
+
+      const pixKeyText = document.getElementById("pixKeyText");
+      const copyPixKeyBtn = document.getElementById("copyPixKeyBtn");
+      const pixAmountText = document.getElementById("pixAmountText");
+      const pixQrImg = document.getElementById("pixQrImg");
+      const copyPixEMVBtn = document.getElementById("copyPixEMVBtn");
+      const pixEmvText = document.getElementById("pixEmvText");
+
+      // Footer premium info
+      const footerYear = document.getElementById("footerYear");
+      if (footerYear) footerYear.textContent = new Date().getFullYear();
+
+      const footerInfo = document.getElementById("footerInfo");
+      if (footerInfo) {
+        footerInfo.innerHTML =
+          `${FOOTER_ADDRESS_LINE}<br />` +
+          `Atendimento via WhatsApp: ` +
+          `<a href="https://wa.me/${STORE_WHATSAPP}" style="font-weight: 900; text-decoration: none; color: rgba(255,255,255,0.92);">(61) 99528-9436</a><br />` +
+          `<span style="color: rgba(255,255,255,0.68);">Horário: ${FOOTER_HOURS}</span>`;
+      }
+
+      if (pixKeyText) pixKeyText.textContent = PIX_KEY;
+
+      phoneEl.addEventListener("input", (e) => {
+        const start = e.target.selectionStart;
+        const before = e.target.value;
+        e.target.value = maskBRPhone(e.target.value);
+        const diff = e.target.value.length - before.length;
+        e.target.setSelectionRange((start || 0) + diff, (start || 0) + diff);
+      });
+
+      copyPixKeyBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(PIX_KEY);
+          alert("Chave Pix copiada!");
+        } catch {
+          alert("Não foi possível copiar automaticamente. Copie manualmente.");
+        }
+      });
+
+      // Cupom
+      let appliedCoupon = "";
+      let couponApplied = false;
+
+      function setCouponUI(type, text) {
+        if (!text) {
+          couponMsg.style.display = "none";
+          couponMsg.textContent = "";
+          couponMsg.className = "badge badge--info";
+        } else {
+          couponMsg.style.display = "inline-flex";
+          couponMsg.textContent = text;
+
+          if (type === "ok") couponMsg.className = "badge badge--ok";
+          else if (type === "err") couponMsg.className = "badge badge--err";
+          else couponMsg.className = "badge badge--info";
+        }
+
+        if (couponApplied && appliedCoupon) {
+          couponInput.value = appliedCoupon;
+          couponInput.disabled = true;
+          applyCouponBtn.textContent = "Remover";
+        } else {
+          couponInput.disabled = false;
+          applyCouponBtn.textContent = "Aplicar";
+        }
+      }
+
+      function tryApplyCoupon() {
+        const code = (couponInput.value || "").toUpperCase().trim();
+
+        if (!code) {
+          couponApplied = false;
+          appliedCoupon = "";
+          setCouponUI("info", "Digite um cupom para aplicar.");
+          render();
+          return;
+        }
+        if (!COUPONS[code]) {
+          couponApplied = false;
+          appliedCoupon = "";
+          setCouponUI("err", "Cupom inválido.");
+          render();
+          return;
+        }
+
+        couponApplied = true;
+        appliedCoupon = code;
+        setCouponUI("ok", `Aplicado: ${code}`);
+        render();
+      }
+
+      function removeCoupon() {
+        couponApplied = false;
+        appliedCoupon = "";
+        couponInput.value = "";
+        setCouponUI("", "");
+        render();
+      }
+
+      applyCouponBtn.addEventListener("click", () => {
+        if (couponApplied) removeCoupon();
+        else tryApplyCoupon();
+      });
+
+      couponInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          if (couponApplied) removeCoupon();
+          else tryApplyCoupon();
+        }
+      });
+
+      setCouponUI("", "");
+
+      function subtotal() {
+        return Object.values(cart).reduce(
+          (acc, it) => acc + it.qty * it.price,
+          0,
+        );
+      }
+      function shippingCost() {
+        if (methodEl.value === "Retirada") return 0;
+        return SHIPPING_TABLE[zoneEl.value] ?? 0;
+      }
+      function discountValue(sub, ship) {
+        if (!couponApplied || !appliedCoupon) return 0;
+        const code = appliedCoupon.toUpperCase().trim();
+        if (!COUPONS[code]) return 0;
+
+        const c = COUPONS[code];
+        if (c.type === "percent") return (sub * c.value) / 100;
+        if (c.type === "shipping") return ship;
+        return 0;
+      }
+      function total() {
+        const sub = subtotal();
+        const ship = shippingCost();
+        const disc = discountValue(sub, ship);
+        return Math.max(0, sub + ship - disc);
+      }
+
+      // PIX EMV + QR
+      function pad2(n) {
+        return String(n).padStart(2, "0");
+      }
+      function sanitizePixText(s, maxLen) {
+        const out = String(s || "")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/[^A-Za-z0-9 \-\.]/g, "")
+          .trim();
+        return out.slice(0, maxLen);
+      }
+      function emvField(id, value) {
+        const v = String(value);
+        return id + pad2(v.length) + v;
+      }
+      function crc16ccitt(str) {
+        let crc = 0xffff;
+        for (let i = 0; i < str.length; i++) {
+          crc ^= str.charCodeAt(i) << 8;
+          for (let j = 0; j < 8; j++) {
+            if (crc & 0x8000) crc = (crc << 1) ^ 0x1021;
+            else crc = crc << 1;
+            crc &= 0xffff;
+          }
+        }
+        return crc.toString(16).toUpperCase().padStart(4, "0");
+      }
+      function buildPixEMV({ key, merchantName, merchantCity, amount, txid }) {
+        const name = sanitizePixText(merchantName, 25) || "RECEBEDOR";
+        const city = sanitizePixText(merchantCity, 15) || "CIDADE";
+        const amt = Number(amount || 0).toFixed(2);
+
+        const gui = emvField("00", "BR.GOV.BCB.PIX");
+        const k = emvField("01", key);
+        const mai = emvField("26", gui + k);
+
+        const mcc = emvField("52", "0000");
+        const currency = emvField("53", "986");
+        const amountField = amount > 0 ? emvField("54", amt) : "";
+        const country = emvField("58", "BR");
+        const mName = emvField("59", name);
+        const mCity = emvField("60", city);
+        const addData = emvField(
+          "62",
+          emvField("05", sanitizePixText(txid || "BV", 25) || "BV"),
+        );
+
+        const payloadNoCrc =
+          emvField("00", "01") +
+          emvField("01", "12") +
+          mai +
+          mcc +
+          currency +
+          amountField +
+          country +
+          mName +
+          mCity +
+          addData +
+          "6304";
+
+        const crc = crc16ccitt(payloadNoCrc);
+        return payloadNoCrc + crc;
+      }
+
+      let currentPixEMV = "";
+
+      function updatePixQR(totalValue, txid) {
+        if (pixAmountText) pixAmountText.textContent = fmt(totalValue);
+
+        currentPixEMV = buildPixEMV({
+          key: PIX_KEY,
+          merchantName: PIX_MERCHANT_NAME,
+          merchantCity: PIX_MERCHANT_CITY,
+          amount: totalValue,
+          txid: txid || "BV",
+        });
+
+        const url =
+          "https://chart.googleapis.com/chart?cht=qr&chs=220x220&chl=" +
+          encodeURIComponent(currentPixEMV);
+
+        if (pixQrImg) pixQrImg.src = url;
+        if (pixEmvText) pixEmvText.textContent = currentPixEMV;
+      }
+
+      copyPixEMVBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(currentPixEMV || PIX_KEY);
+          alert("Pix (copia e cola) copiado!");
+          if (pixEmvText) pixEmvText.style.display = "block";
+        } catch {
+          alert("Não foi possível copiar automaticamente.");
+          if (pixEmvText) pixEmvText.style.display = "block";
+        }
+      });
+
+      function render() {
+        const items = Object.values(cart);
+
+        if (items.length === 0) {
+          cartList.innerHTML = `<div class="empty">Seu carrinho está vazio. Volte aos produtos para adicionar itens.</div>`;
+          subtotalEl.textContent = fmt(0);
+          shippingEl.textContent = fmt(0);
+          discountEl.textContent = `- ${fmt(0)}`;
+          totalEl.textContent = fmt(0);
+          updatePixQR(0, "BV");
+          return;
+        }
+
+        cartList.innerHTML = items
+          .map(
+            (it) => `
+          <div class="item">
+            <img class="item__img" src="${it.img}" alt="${it.name}" />
+            <div>
+              <p class="item__name">${it.name}</p>
+              <p class="item__meta">${it.id} • ${fmt(it.price)} cada</p>
+
+              <div class="qty">
+                <button type="button" data-dec="${it.id}">−</button>
+                <span>${it.qty}</span>
+                <button type="button" data-inc="${it.id}">+</button>
+              </div>
+
+              <button class="remove" type="button" data-rem="${it.id}">Remover</button>
+            </div>
+            <div class="item__right">
+              <div class="item__price">${fmt(it.price * it.qty)}</div>
+            </div>
+          </div>
+        `,
+          )
+          .join("");
+
+        const sub = Object.values(cart).reduce(
+          (acc, it) => acc + it.qty * it.price,
+          0,
+        );
+        const ship =
+          methodEl.value === "Retirada"
+            ? 0
+            : (SHIPPING_TABLE[zoneEl.value] ?? 0);
+        const disc = (() => {
+          if (!couponApplied || !appliedCoupon) return 0;
+          const c = COUPONS[appliedCoupon];
+          if (!c) return 0;
+          if (c.type === "percent") return (sub * c.value) / 100;
+          if (c.type === "shipping") return ship;
+          return 0;
+        })();
+        const tot = Math.max(0, sub + ship - disc);
+
+        subtotalEl.textContent = fmt(sub);
+        shippingEl.textContent = fmt(ship);
+        discountEl.textContent = `- ${fmt(disc)}`;
+        totalEl.textContent = fmt(tot);
+
+        updatePixQR(tot, "BV");
+      }
+
+      function inc(id) {
+        if (cart[id]) {
+          cart[id].qty += 1;
+          saveCart(cart);
+          render();
+        }
+      }
+      function dec(id) {
+        if (!cart[id]) return;
+        cart[id].qty -= 1;
+        if (cart[id].qty <= 0) delete cart[id];
+        saveCart(cart);
+        render();
+      }
+      function rem(id) {
+        if (cart[id]) {
+          delete cart[id];
+          saveCart(cart);
+          render();
+        }
+      }
+
+      cartList.addEventListener("click", (e) => {
+        const a = e.target.closest("[data-inc]");
+        const b = e.target.closest("[data-dec]");
+        const c = e.target.closest("[data-rem]");
+        if (a) inc(a.dataset.inc);
+        if (b) dec(b.dataset.dec);
+        if (c) rem(c.dataset.rem);
+      });
+
+      methodEl.addEventListener("change", () => {
+        const isDelivery = methodEl.value === "Entrega";
+        addressEl.disabled = !isDelivery;
+        zoneEl.disabled = !isDelivery;
+        render();
+      });
+      zoneEl.addEventListener("change", render);
+
+      clearCartBtn.addEventListener("click", () => {
+        cart = {};
+        saveCart(cart);
+        render();
+      });
+
+      // init
+      addressEl.disabled = false;
+      zoneEl.disabled = false;
+      render();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,104 @@
+/* ===== PAGE ===== */
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 16px 60px;
+}
+
+.page__header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.page__header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.page__header p {
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* ===== GRID ===== */
+.produtos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+}
+
+/* ===== CARD MINIMALISTA ===== */
+.pcard {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 18px;
+}
+
+.pcard__top {
+  margin-bottom: 10px;
+}
+
+.ptag {
+  background: #dff2df;
+  color: #1e6b2f;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  display: inline-block;
+}
+
+.pcard__img {
+  width: 100%;
+  height: 240px;
+  object-fit: contain;
+  background: #f5f5f5;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.pcard__name {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #111;
+}
+
+.pcard__desc {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 18px;
+}
+
+.pcard__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+
+.pcard__from {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.pcard__price {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1e7a34;
+}
+
+.pcard__buy {
+  width: 100%;
+  background: #0f0f10;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pcard__buy:hover {
+  opacity: 0.92;
+}

@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pagamento | BioVida</title>
+
+    <style>
+      :root {
+        --ink: #0f0f10;
+        --muted: rgba(0, 0, 0, 0.55);
+        --line: rgba(0, 0, 0, 0.1);
+        --soft: #f6f6f6;
+        --green: #1e7a34;
+      }
+
+      * {
+        box-sizing: border-box;
+        border-radius: 0;
+      }
+      body {
+        margin: 0;
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Inter,
+          Arial;
+        color: var(--ink);
+        background: #fff;
+      }
+
+      /* ===== LAYOUT GRANDE ===== */
+      .page {
+        max-width: 1280px;
+        margin: auto;
+        padding: 48px 20px 120px;
+      }
+
+      .hero {
+        max-width: 720px;
+        margin-bottom: 48px;
+      }
+      .hero h1 {
+        margin: 0;
+        font-size: 42px;
+        font-weight: 950;
+      }
+      .hero p {
+        margin: 12px 0 0;
+        color: var(--muted);
+        font-weight: 600;
+        line-height: 1.6;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+      }
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ===== BLOCO ===== */
+      .block {
+        border: 1px solid var(--line);
+        padding: 32px;
+        background: #fff;
+      }
+      .block h2 {
+        margin: 0 0 24px;
+        font-size: 13px;
+        letter-spacing: 0.14em;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      /* ===== FORM ===== */
+      .form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .full {
+        grid-column: 1/-1;
+      }
+
+      label {
+        font-size: 12px;
+        font-weight: 900;
+        margin-bottom: 6px;
+        display: block;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 16px;
+        border: 1px solid var(--line);
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: #000;
+      }
+
+      /* ===== DESCONTO ===== */
+      .coupon {
+        display: flex;
+        gap: 12px;
+      }
+      .coupon input {
+        height: 56px;
+        font-size: 16px;
+        letter-spacing: 0.04em;
+      }
+      .coupon button {
+        height: 56px;
+        padding: 0 22px;
+        border: 1px solid var(--line);
+        background: #fff;
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      /* ===== TOTAL ===== */
+      .totalBox {
+        margin-top: 24px;
+        border-top: 1px solid var(--line);
+        padding-top: 24px;
+      }
+      .totalRow {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 900;
+        margin-bottom: 10px;
+      }
+      .total {
+        font-size: 28px;
+        color: var(--green);
+      }
+
+      /* ===== PIX ===== */
+      .pixWrap {
+        display: grid;
+        place-items: center;
+        text-align: center;
+        padding: 40px;
+        background: var(--soft);
+        border: 1px solid var(--line);
+      }
+
+      .qrBox {
+        position: relative;
+        width: 260px;
+        height: 260px;
+        background: #fff;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line);
+      }
+
+      /* animação */
+      .qrBox::before,
+      .qrBox::after {
+        content: "";
+        position: absolute;
+        inset: -18px;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        animation: ring 1.8s infinite;
+      }
+      .qrBox::after {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes ring {
+        0% {
+          opacity: 0;
+          transform: scale(0.98);
+        }
+        50% {
+          opacity: 0.7;
+          transform: scale(1.02);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(1.06);
+        }
+      }
+
+      canvas {
+        width: 180px;
+        height: 180px;
+      }
+
+      .pixKey {
+        margin-top: 18px;
+        font-weight: 900;
+      }
+
+      .pixBtns {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+        width: 100%;
+      }
+      .pixBtns button {
+        flex: 1;
+        padding: 16px;
+        border: 1px solid var(--line);
+        background: #fff;
+        font-weight: 900;
+        cursor: pointer;
+      }
+      .primary {
+        background: #000;
+        color: #fff;
+        border-color: #000;
+      }
+
+      /* ===== FOOT ===== */
+      .note {
+        margin-top: 16px;
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="page">
+      <section class="hero">
+        <h1>Pagamento</h1>
+        <p>
+          Preencha seus dados, realize o pagamento via PIX e envie o
+          comprovante. Confirmação rápida e atendimento humano 💚
+        </p>
+      </section>
+
+      <section class="grid">
+        <!-- DADOS DO CLIENTE -->
+        <div class="block">
+          <h2>Seus dados</h2>
+
+          <form id="form" class="form">
+            <div class="full">
+              <label>Nome completo</label>
+              <input id="name" required />
+            </div>
+
+            <div>
+              <label>WhatsApp</label>
+              <input id="phone" required />
+            </div>
+
+            <div>
+              <label>E-mail</label>
+              <input id="email" type="email" required />
+            </div>
+
+            <div>
+              <label>CPF</label>
+              <input id="cpf" placeholder="000.000.000-00" required />
+            </div>
+
+            <div>
+              <label>CEP</label>
+              <input id="cep" placeholder="00000-000" required />
+            </div>
+
+            <div class="full">
+              <label>Endereço</label>
+              <input id="address" placeholder="Rua, nº, bairro, cidade" />
+            </div>
+
+            <div class="full">
+              <label>Desconto</label>
+              <div class="coupon">
+                <input id="coupon" placeholder="Ex: BIO10" />
+                <button type="button" onclick="applyCoupon()">Aplicar</button>
+              </div>
+            </div>
+
+            <div class="full totalBox">
+              <div class="totalRow">
+                <span>Total</span>
+                <span class="total" id="total">R$ 0,00</span>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- PAGAMENTO -->
+        <div class="block">
+          <h2>Pagamento via PIX</h2>
+
+          <div class="pixWrap">
+            <div class="qrBox">
+              <canvas id="qr"></canvas>
+            </div>
+
+            <div class="pixKey">
+              Chave PIX (CPF): <br /><b>467.924.698-74</b>
+            </div>
+
+            <div class="pixBtns">
+              <button onclick="copyPix()">Copiar chave</button>
+              <button class="primary" onclick="sendWpp()">
+                Enviar comprovante
+              </button>
+            </div>
+
+            <div class="note">
+              Após o pagamento, envie o comprovante. Seu pedido ficará
+              <b>aguardando confirmação</b>.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      /* ===== CONFIG ===== */
+      const PIX_KEY = "46792469874";
+      const STORE_WPP = "5561995289436";
+      let totalValue = 129.9;
+
+      /* ===== TOTAL ===== */
+      function renderTotal() {
+        document.getElementById("total").innerText = totalValue.toLocaleString(
+          "pt-BR",
+          { style: "currency", currency: "BRL" },
+        );
+      }
+      renderTotal();
+
+      /* ===== DESCONTO ===== */
+      function applyCoupon() {
+        const c = document.getElementById("coupon").value.toUpperCase();
+        if (c === "BIO10") {
+          totalValue *= 0.9;
+          renderTotal();
+          alert("Cupom aplicado");
+        } else alert("Cupom inválido");
+      }
+
+      /* ===== QR FAKE (VISUAL) ===== */
+      const ctx = document.getElementById("qr").getContext("2d");
+      ctx.fillRect(0, 0, 180, 180);
+      for (let i = 0; i < 200; i++) {
+        ctx.clearRect(Math.random() * 180, Math.random() * 180, 4, 4);
+      }
+
+      /* ===== PIX ===== */
+      function copyPix() {
+        navigator.clipboard.writeText(PIX_KEY);
+        alert("Chave PIX copiada");
+      }
+
+      function sendWpp() {
+        const name = document.getElementById("name").value;
+        if (!name) {
+          alert("Preencha seus dados primeiro");
+          return;
+        }
+        const msg = `Olá! Já realizei o pagamento.\nNome: ${name}\nTotal: ${document.getElementById("total").innerText}`;
+        window.open(
+          `https://wa.me/${STORE_WPP}?text=${encodeURIComponent(msg)}`,
+        );
+      }
+    </script>
+  </body>
+</html>

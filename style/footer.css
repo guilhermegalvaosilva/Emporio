@@ -1,0 +1,254 @@
+:root {
+  /* (4) Ajuste o verde da BioVida aqui */
+  --bio-accent: #2fbf71;
+
+  /* base luxo */
+  --bio-bg: #070a08;
+  --bio-bg2: #0b100d;
+  --bio-line: rgba(255, 255, 255, 0.07);
+  --bio-text: #cfcfcf;
+  --bio-muted: #9a9a9a;
+  --bio-white: #ffffff;
+}
+
+.footer--lux {
+  background: linear-gradient(180deg, var(--bio-bg) 0%, var(--bio-bg2) 100%);
+  color: var(--bio-text);
+  font-family:
+    "Poppins",
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
+}
+
+.footer__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 96px 24px 72px;
+  display: grid;
+  grid-template-columns: 2.1fr 1fr 1fr 1.2fr;
+  gap: 56px;
+}
+
+/* marca */
+.footer__mark {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.footer__logo {
+  font-size: 1.9rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--bio-white);
+}
+
+.footer__badge {
+  font-size: 0.7rem;
+  letter-spacing: 2.5px;
+  padding: 6px 10px;
+  border: 1px solid var(--bio-line);
+  color: rgba(255, 255, 255, 0.75);
+  text-transform: uppercase;
+  /* sem border radius */
+}
+
+.footer__slogan {
+  max-width: 360px;
+  font-size: 0.98rem;
+  line-height: 1.75;
+  color: var(--bio-muted);
+  margin-bottom: 18px;
+}
+
+.footer__mini {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer__mini .dot {
+  opacity: 0.6;
+}
+
+/* colunas */
+.footer__title {
+  font-size: 0.78rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  margin-bottom: 18px;
+}
+
+.footer__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.footer__list a,
+.footer__social a,
+.footer__contactLink {
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  font-size: 0.92rem;
+  transition:
+    color 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.footer__list a:hover,
+.footer__social a:hover,
+.footer__contactLink:hover {
+  color: var(--bio-accent);
+}
+
+.footer__contact p {
+  margin: 0 0 10px;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.footer__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--bio-line);
+  color: var(--bio-white);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease;
+  /* sem border radius */
+}
+
+.footer__cta:hover {
+  border-color: rgba(47, 191, 113, 0.5);
+  color: var(--bio-accent);
+}
+
+.footer__social {
+  margin-top: 18px;
+  display: flex;
+  gap: 14px;
+  border-top: 1px solid var(--bio-line);
+  padding-top: 18px;
+}
+
+/* bottom */
+.footer__bottom {
+  border-top: 1px solid var(--bio-line);
+  padding: 22px 24px;
+}
+
+.footer__bottomInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.footer__made {
+  letter-spacing: 1px;
+}
+
+/* WhatsApp fixo (3) */
+.wpp-float {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 999;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(7, 10, 8, 0.8);
+  color: var(--bio-white);
+  text-decoration: none;
+
+  backdrop-filter: blur(10px);
+  transition:
+    transform 0.2s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+  /* sem border radius */
+}
+
+.wpp-float:hover {
+  transform: translateY(-2px);
+  border-color: rgba(47, 191, 113, 0.45);
+  color: var(--bio-accent);
+}
+
+.wpp-float__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: currentColor;
+  /* sem border radius */
+}
+
+.wpp-float__text {
+  font-size: 0.9rem;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+/* responsivo */
+@media (max-width: 900px) {
+  .footer__container {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 72px 20px 56px;
+  }
+  .footer__bottomInner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .footer__container {
+    grid-template-columns: 1fr;
+  }
+  .wpp-float__text {
+    display: none; /* fica só o botão clean no mobile */
+  }
+}
+
+.footer__made {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.footer__agency {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+
+.footer__agency:hover {
+  color: var(--bio-accent);
+}

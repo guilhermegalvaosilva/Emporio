@@ -1,0 +1,139 @@
+.reviews {
+  padding: 46px 16px;
+  background: #fff;
+}
+
+.reviews__head {
+  max-width: 1200px;
+  margin: 0 auto 18px;
+}
+
+.reviews__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #111;
+}
+
+.reviews__title h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+}
+
+.reviews__icon {
+  font-size: 22px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+/* carrossel */
+.reviews__carousel {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.reviews__track {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px 8px;
+}
+
+.reviews__track::-webkit-scrollbar {
+  display: none;
+}
+
+/* setas */
+.reviews__nav {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  font-size: 26px;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.reviews__nav--prev {
+  left: -8px;
+}
+.reviews__nav--next {
+  right: -8px;
+}
+
+@media (max-width: 640px) {
+  .reviews__nav {
+    display: none;
+  }
+}
+
+/* card premium */
+.review-card {
+  min-width: 270px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.07);
+  border-radius: 14px;
+  padding: 14px 14px 16px;
+  text-align: center;
+}
+
+.review-card__text {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.62);
+  line-height: 1.45;
+  min-height: 72px;
+}
+
+.quote {
+  color: rgba(0, 0, 0, 0.25);
+  font-weight: 900;
+  font-size: 18px;
+  margin: 0 4px;
+}
+
+/* avatar */
+.review-card__avatar {
+  width: 54px;
+  height: 54px;
+  margin: 12px auto 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 2px solid rgba(0, 0, 0, 0.06);
+}
+
+.review-card__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* meta */
+.review-card__name {
+  font-weight: 900;
+  font-size: 13px;
+  color: #111;
+}
+
+.review-card__place {
+  margin-top: 2px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.review-card__stars {
+  margin-top: 6px;
+  letter-spacing: 2px;
+  color: #f59e0b; /* dourado */
+  font-size: 13px;
+}

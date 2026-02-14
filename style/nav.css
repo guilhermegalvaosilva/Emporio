@@ -1,0 +1,90 @@
+.catbar {
+  background: #fff;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* CONTAINER CENTRALIZADO */
+.catbar__wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 🔹 ISSO centraliza tudo */
+  gap: 26px;
+
+  flex-wrap: wrap; /* quebra linha se precisar */
+}
+
+/* Botão Categorias */
+.catbar__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: 0;
+  padding: 10px 8px;
+  cursor: pointer;
+
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.88);
+}
+
+.catbar__icon {
+  font-size: 18px;
+}
+
+.catbar__chev {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+/* Links */
+.catbar__link {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.85);
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px 6px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+.catbar__link:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* + VENDIDOS */
+.catbar__link--hot {
+  font-weight: 700;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .catbar__wrap {
+    gap: 18px;
+  }
+
+  .catbar__link {
+    font-size: 15px;
+  }
+}

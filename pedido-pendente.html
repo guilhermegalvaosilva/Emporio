@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Pagamento pendente | BioVida</title>
+    <link rel="stylesheet" href="/frontend/style.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+        border-radius: 0 !important;
+      }
+      body {
+        margin: 0;
+        background: #fff;
+        color: #0f0f10;
+      }
+      .wrap {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 16px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      a {
+        display: inline-block;
+        padding: 12px 14px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+        font-weight: 900;
+        color: inherit;
+      }
+      p {
+        font-weight: 700;
+        opacity: 0.75;
+        line-height: 1.6;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-weight: 900;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Pagamento pendente</h1>
+      <p>
+        Seu pagamento está em processamento. Você pode acompanhar o status do
+        pedido.
+      </p>
+      <a href="/frontend/pedido-enviado.html" id="go">Ver status do pedido</a>
+    </div>
+
+    <script>
+      const p = new URLSearchParams(location.search);
+      const o = p.get("order") || "";
+      document.getElementById("go").href =
+        "/frontend/pedido-enviado.html?order=" + encodeURIComponent(o);
+    </script>
+  </body>
+</html>

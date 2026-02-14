@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pedido | BioVida</title>
+    <link rel="stylesheet" href="/frontend/style.css" />
+    <style>
+      :root {
+        --ink: #0f0f10;
+        --muted: rgba(0, 0, 0, 0.62);
+        --line: rgba(0, 0, 0, 0.1);
+        --soft: #f5f5f5;
+        --green: #1e7a34;
+      }
+      * {
+        box-sizing: border-box;
+        border-radius: 0 !important;
+      }
+      body {
+        margin: 0;
+        background: #fff;
+        color: var(--ink);
+      }
+      .page {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 32px 16px 90px;
+      }
+      .card {
+        border: 1px solid var(--line);
+        background: #fff;
+        padding: 18px;
+      }
+      .title {
+        margin: 0 0 6px;
+        font-size: 22px;
+        font-weight: 900;
+      }
+      .sub {
+        margin: 0 0 14px;
+        color: var(--muted);
+        font-weight: 700;
+        line-height: 1.6;
+      }
+      .badge {
+        display: inline-block;
+        border: 1px solid var(--line);
+        padding: 6px 10px;
+        font-weight: 900;
+        background: var(--soft);
+      }
+      .wait {
+        background: #fff7d6;
+        color: #6b5a00;
+        border-color: rgba(0, 0, 0, 0.06);
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+      .btn {
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--ink);
+        padding: 12px 14px;
+        font-weight: 900;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn--primary {
+        background: var(--ink);
+        color: #fff;
+        border-color: var(--ink);
+      }
+      .mono {
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+      }
+      .box {
+        margin-top: 14px;
+        border-top: 1px solid var(--line);
+        padding-top: 14px;
+      }
+      ul {
+        margin: 10px 0 0;
+        padding-left: 18px;
+        color: var(--muted);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav__wrap">
+        <nav class="nav__side nav__side--left">
+          <a href="/frontend/index.html" class="nav__link">HOME</a>
+          <a href="/frontend/mais-vendidos.html" class="nav__link">PRODUTOS</a>
+        </nav>
+        <a
+          href="/frontend/index.html"
+          class="brand"
+          aria-label="Empório BioVida"
+        >
+          <span class="brand__emp">EMPÓRIO</span>
+          <span class="brand__name"
+            ><span class="brand__bio">Bio</span
+            ><span class="brand__vida">Vida</span></span
+          >
+          <span class="brand__sub">PRODUTOS NATURAIS</span>
+        </a>
+        <nav class="nav__side nav__side--right">
+          <a href="/frontend/sobre.html" class="nav__link">SOBRE</a>
+          <a href="#" class="nav__link">CONTATO</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="card">
+        <h1 class="title">Pedido em andamento</h1>
+        <p class="sub">Status: aguardando comprovante de pagamento.</p>
+
+        <div class="row">
+          <span class="badge wait" id="statusBadge">AGUARDANDO</span>
+          <span class="mono" id="orderId">Pedido: —</span>
+        </div>
+
+        <div class="box">
+          <div class="sub" style="margin: 0 0 10px">
+            Para confirmar mais rápido:
+          </div>
+          <ul>
+            <li>Envie o comprovante no WhatsApp usando o botão do checkout</li>
+            <li>Se preferir, mande por e-mail (anexando manualmente)</li>
+          </ul>
+        </div>
+
+        <div class="row" style="margin-top: 16px">
+          <a class="btn" href="/frontend/checkout.html">Voltar ao checkout</a>
+          <a class="btn btn--primary" href="/frontend/mais-vendidos.html"
+            >Comprar mais</a
+          >
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const order = params.get("order") || "";
+      const orderIdEl = document.getElementById("orderId");
+
+      if (order) orderIdEl.textContent = "Pedido: " + order;
+
+      // Se tiver o resumo salvo, mantém o status no localStorage (manual)
+      const last = JSON.parse(
+        localStorage.getItem("biovida_last_order") || "null",
+      );
+      if (last && last.orderId && last.orderId === order) {
+        // aqui poderia exibir mais detalhes, se quiser depois
+      }
+    </script>
+  </body>
+</html>

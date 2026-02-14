@@ -1,0 +1,106 @@
+/* ===== Benefits Minimal (Premium Clean) ===== */
+.benefits.premium {
+  background: #ffffff;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.benefits__wrap {
+  max-width: 1400px; /* mais largo */
+  margin: 0 auto;
+  padding: 18px 24px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0; /* minimalista: sem “cards separados” */
+}
+
+/* vira “linhas” (divisórias) ao invés de cards */
+.premium-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 16px 18px;
+
+  background: transparent;
+  border: 0;
+  border-radius: 0 !important;
+  box-shadow: none;
+
+  border-right: 1px solid rgba(0, 0, 0, 0.08); /* divisória */
+}
+
+.benefit:last-child.premium-card {
+  border-right: 0;
+}
+
+/* hover bem discreto */
+.premium-card:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* ícone minimal */
+.benefit__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 0 !important;
+
+  display: grid;
+  place-items: center;
+
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #0f172a;
+}
+
+.benefit__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* tipografia mais limpa */
+.benefit__title {
+  font-weight: 700;
+  color: #111;
+  line-height: 1.15;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+}
+
+.benefit__desc {
+  color: rgba(0, 0, 0, 0.62);
+  font-size: 12.5px;
+  line-height: 1.2;
+  margin-top: 3px;
+}
+
+.benefits__note {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px 14px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .benefits__wrap {
+    grid-template-columns: 1fr;
+    padding: 12px 16px;
+  }
+
+  .premium-card {
+    border-right: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 14px 0;
+    background: transparent;
+  }
+
+  .benefit:last-child.premium-card {
+    border-bottom: 0;
+  }
+
+  .benefits__note {
+    padding: 0 16px 14px;
+  }
+}

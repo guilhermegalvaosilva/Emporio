@@ -1,0 +1,1596 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emporio - Biovid</title>
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- ✅ CSS do carrinho (pode levar pro style.css depois, se quiser) -->
+    <style>
+      /* ===== Floating Cart Button ===== */
+      .cart-fab {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        z-index: 999;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        background: #0f0f10;
+        color: #fff;
+        border: 1px solid #0f0f10;
+        padding: 12px 14px;
+        cursor: pointer;
+      }
+      .cart-fab__count {
+        background: #fff;
+        color: #0f0f10;
+        font-weight: 900;
+        padding: 2px 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      /* ===== Cart Drawer ===== */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
+        display: none;
+        z-index: 1000;
+      }
+      .overlay.is-open {
+        display: block;
+      }
+
+      .drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: 420px;
+        max-width: 92vw;
+        background: #fff;
+        border-left: 1px solid rgba(0, 0, 0, 0.1);
+        z-index: 1001;
+        transform: translateX(100%);
+        transition: transform 0.18s ease;
+        display: flex;
+        flex-direction: column;
+      }
+      .drawer.is-open {
+        transform: translateX(0);
+      }
+
+      .drawer__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      .drawer__title {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 900;
+      }
+      .drawer__close {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: #fff;
+        padding: 8px 10px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      .drawer__body {
+        padding: 16px;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .empty {
+        border: 1px dashed rgba(0, 0, 0, 0.1);
+        background: #fff;
+        padding: 14px;
+        color: rgba(0, 0, 0, 0.62);
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .cart-item {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 12px;
+        display: grid;
+        grid-template-columns: 54px 1fr;
+        gap: 10px;
+        align-items: start;
+      }
+
+      .cart-item__img {
+        width: 54px;
+        height: 54px;
+        background: #f5f5f5;
+        object-fit: contain;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+      }
+
+      .cart-item__name {
+        margin: 0 0 4px;
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      .cart-item__meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        color: rgba(0, 0, 0, 0.62);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .qty {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .qty button {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: #fff;
+        width: 34px;
+        height: 34px;
+        cursor: pointer;
+        font-weight: 900;
+      }
+      .qty span {
+        min-width: 22px;
+        text-align: center;
+        font-weight: 900;
+      }
+
+      .remove {
+        margin-top: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: #fff;
+        padding: 8px 10px;
+        cursor: pointer;
+        font-weight: 900;
+      }
+
+      .drawer__foot {
+        padding: 16px;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        background: #fff;
+      }
+
+      .total {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        font-weight: 900;
+        margin-bottom: 12px;
+      }
+
+      .checkout {
+        width: 100%;
+        border: 0;
+        background: #0f0f10;
+        color: #fff;
+        padding: 14px 14px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      .clear {
+        width: 100%;
+        margin-top: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: #fff;
+        color: #0f0f10;
+        padding: 12px 14px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="topbar">
+      <p class="frete-gratis">
+        <strong>FRETE GRÁTIS PARA TODO O BRASIL</strong> Consulte A Nossas
+        Condições
+      </p>
+    </div>
+
+    <header class="nav">
+      <div class="nav__wrap">
+        <!-- Menu esquerdo -->
+        <nav class="nav__side nav__side--left">
+          <a href="#" class="nav__link">HOME</a>
+          <a href="/produtos.html" class="nav__link">PRODUTOS</a>
+        </nav>
+
+        <!-- Logo central BioVida -->
+        <a href="#" class="brand" aria-label="Empório BioVida">
+          <span class="brand__emp">EMPÓRIO</span>
+          <span class="brand__name">
+            <span class="brand__bio">Bio</span
+            ><span class="brand__vida">Vida</span>
+          </span>
+          <span class="brand__sub">PRODUTOS NATURAIS</span>
+        </a>
+
+        <!-- Menu direito -->
+        <nav class="nav__side nav__side--right">
+          <a href="/sobre.html" class="nav__link">SOBRE</a>
+          <a href="#footer" class="nav__link">CONTATO</a>
+        </nav>
+      </div>
+    </header>
+
+    <nav class="catbar" aria-label="Categorias">
+      <div class="catbar__wrap">
+        <button class="catbar__toggle" type="button">
+          <span class="catbar__icon">☰</span>
+          <span class="catbar__label">CATEGORIAS</span>
+          <span class="catbar__chev">▾</span>
+        </button>
+
+        <a class="catbar__link catbar__link--hot" href="./mais-vendidos.html"
+          >+ VENDIDOS</a
+        >
+
+        <a class="catbar__link" href="#">Cupuaçu Desidratado</a>
+        <a class="catbar__link" href="#">Castanhas</a>
+        <a class="catbar__link" href="#">Frutas | Desidratados</a>
+        <a class="catbar__link" href="#">Farináceos</a>
+      </div>
+    </nav>
+
+    <section class="hero" id="home">
+      <div class="hero__slider" id="heroSlider">
+        <div class="hero__track">
+          <article
+            class="hero__slide"
+            data-title="Sua melhor versão"
+            data-subtitle="Emagrecimento / performance / bem-estar"
+            style="background-image: url(&quot;./img/bio.png&quot;)"
+          ></article>
+          <article
+            class="hero__slide"
+            data-title="Sua melhor versão"
+            data-subtitle="Emagrecimento / performance / bem-estar"
+            style="background-image: url(&quot;./img/bvbv22.png&quot;)"
+          ></article>
+
+          <article
+            class="hero__slide"
+            style="background-image: url(&quot;./img/frutos.png&quot;)"
+          ></article>
+        </div>
+
+        <div class="hero__overlay"></div>
+
+        <button class="hero__nav hero__nav--prev" aria-label="Slide anterior">
+          ‹
+        </button>
+        <button class="hero__nav hero__nav--next" aria-label="Próximo slide">
+          ›
+        </button>
+
+        <div class="hero__dots" aria-label="Navegação do carrossel"></div>
+      </div>
+    </section>
+
+    <section class="benefits premium" aria-label="Benefícios BioVida">
+      <div class="benefits__wrap">
+        <div class="benefit premium-card">
+          <div class="benefit__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M3 7h11v10H3V7Z"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M14 10h4l3 3v4h-7v-7Z"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M7 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"
+                stroke="currentColor"
+                stroke-width="1.6"
+              />
+              <path
+                d="M18 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"
+                stroke="currentColor"
+                stroke-width="1.6"
+              />
+            </svg>
+          </div>
+          <div class="benefit__text">
+            <div class="benefit__title">Frete grátis</div>
+            <div class="benefit__desc">Consulte as condições</div>
+          </div>
+        </div>
+
+        <div class="benefit premium-card">
+          <div class="benefit__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M13 2 4 14h7l-1 8 10-14h-7l0-6Z"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <div class="benefit__text">
+            <div class="benefit__title">Entrega rápida</div>
+            <div class="benefit__desc">Envio no mesmo dia*</div>
+          </div>
+        </div>
+
+        <div class="benefit premium-card">
+          <div class="benefit__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M4 12a8 8 0 0 1 16 0"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+              <path
+                d="M6 12v6a2 2 0 0 0 2 2h2"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+              <path
+                d="M18 12v5a2 2 0 0 1-2 2h-3"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+              <path
+                d="M8 12a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+              <path
+                d="M16 12a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div class="benefit__text">
+            <div class="benefit__title">Atendimento no WhatsApp</div>
+            <div class="benefit__desc">Suporte rápido e humanizado</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="benefits__note">*Conforme região e horário.</div>
+    </section>
+
+    <section class="promo" aria-label="Banners BioVida">
+      <div class="promo__wrap">
+        <div class="promo__grid">
+          <a class="promo__card" href="#whatsapp">
+            <img
+              src="./img/pq.png"
+              alt="Fale com a gente no WhatsApp"
+              loading="lazy"
+            />
+          </a>
+
+          <a class="promo__card" href="#produtos">
+            <img
+              src="./img/qualidade.png"
+              alt="Produtos naturais e suplementação"
+              loading="lazy"
+            />
+          </a>
+
+          <a class="promo__card" href="#entrega">
+            <img
+              src="./img/frete.png"
+              alt="Entregamos em todo o Brasil"
+              loading="lazy"
+            />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="mv" id="mais-vendidos" aria-label="Mais vendidos BioVida">
+      <div class="mv__head">
+        <h2 class="mv__title">Mais vendidos</h2>
+        <p class="mv__subtitle">
+          Seleção premium de naturais, nuts e suplementação.
+        </p>
+      </div>
+
+      <div class="mv__carousel">
+        <button class="mv__nav mv__nav--prev" aria-label="Voltar">‹</button>
+
+        <div class="mv__track" id="mvTrack">
+          <!-- 2 -->
+          <article class="card">
+            <div class="card__top"><span class="tag">Premium</span></div>
+            <img
+              class="card__img"
+              src="./img/maisVendidos/castanha.png"
+              alt="Castanha do Pará"
+            />
+            <h3 class="card__name">Castanha do Pará</h3>
+            <p class="card__desc">Inteira • Selecionada</p>
+            <div class="card__row">
+              <span class="card__from">A partir de</span
+              ><span class="card__price">R$ 27,17</span>
+            </div>
+
+            <!-- ✅ Comprar funcionando -->
+            <button
+              class="btn btn--buy"
+              type="button"
+              data-add
+              data-id="P002"
+              data-name="Castanha do Pará"
+              data-price="27.17"
+              data-img="./img/nuts.bio.jpg"
+            >
+              Comprar
+            </button>
+          </article>
+
+          <!-- 3 -->
+          <article class="card">
+            <div class="card__top"><span class="tag">Premium</span></div>
+            <img
+              class="card__img"
+              src="./img/maisVendidos/ameixa.png"
+              alt="Ameixa seca sem caroço"
+            />
+            <h3 class="card__name">Ameixa Seca</h3>
+            <p class="card__desc">Sem caroço • Importada</p>
+            <div class="card__row">
+              <span class="card__from">A partir de</span
+              ><span class="card__price">R$ 12,45</span>
+            </div>
+
+            <button
+              class="btn btn--buy"
+              type="button"
+              data-add
+              data-id="P015"
+              data-name="Ameixa Seca"
+              data-price="12.45"
+              data-img="./frontend/img/nuts.bio.jpg"
+            >
+              Comprar
+            </button>
+          </article>
+
+          <!-- 4 -->
+          <article class="card">
+            <div class="card__top"><span class="tag">Premium</span></div>
+            <img
+              class="card__img"
+              src="./img/maisVendidos/mariposa.png"
+              alt="Nozes Mariposa"
+            />
+            <h3 class="card__name">Nozes Mariposa</h3>
+            <p class="card__desc">Extra light • Inteira</p>
+            <div class="card__row">
+              <span class="card__from">A partir de</span
+              ><span class="card__price">R$ 23,54</span>
+            </div>
+
+            <button
+              class="btn btn--buy"
+              type="button"
+              data-add
+              data-id="P006"
+              data-name="Nozes Mariposa"
+              data-price="23.54"
+              data-img="./frontend/img/nuts.bio.jpg"
+            >
+              Comprar
+            </button>
+          </article>
+
+          <!-- 5 -->
+          <article class="card">
+            <div class="card__top"><span class="tag">Premium</span></div>
+            <img
+              class="card__img"
+              src="/img/maisVendidos/caju.png"
+              alt="Castanha de caju"
+            />
+            <h3 class="card__name">Castanha de Caju</h3>
+            <p class="card__desc">Inteira • Torrada</p>
+            <div class="card__row">
+              <span class="card__from">A partir de</span
+              ><span class="card__price">R$ 22,98</span>
+            </div>
+
+            <button
+              class="btn btn--buy"
+              type="button"
+              data-add
+              data-id="P003"
+              data-name="Castanha de Caju"
+              data-price="22.98"
+              data-img="./img/caju.jpg"
+            >
+              Comprar
+            </button>
+          </article>
+
+          <!-- 6 -->
+          <article class="card">
+            <div class="card__top"><span class="tag">Premium</span></div>
+            <img
+              class="card__img"
+              src="./img/maisVendidos/whey.png"
+              alt="Whey Protein"
+            />
+            <h3 class="card__name">Whey Protein</h3>
+            <p class="card__desc">Alta proteína • Sabor baunilha</p>
+            <div class="card__row">
+              <span class="card__from">A partir de</span
+              ><span class="card__price">R$ 119,90</span>
+            </div>
+
+            <button
+              class="btn btn--buy"
+              type="button"
+              data-add
+              data-id="P025"
+              data-name="Whey Protein"
+              data-price="119.90"
+              data-img="./img/whey.jpg"
+            >
+              Comprar
+            </button>
+          </article>
+
+          <!-- 7 -->
+          <article class="card">
+            <div class="card__top"><span class="tag">Premium</span></div>
+            <img
+              class="card__img"
+              src="./img/maisVendidos/creatina.png"
+              alt="Creatina Monohidratada"
+            />
+            <h3 class="card__name">Creatina</h3>
+            <p class="card__desc">Monohidratada • 300g</p>
+            <div class="card__row">
+              <span class="card__from">A partir de</span
+              ><span class="card__price">R$ 89,90</span>
+            </div>
+
+            <button
+              class="btn btn--buy"
+              type="button"
+              data-add
+              data-id="P026"
+              data-name="Creatina"
+              data-price="89.90"
+              data-img="./img/creatina.jpg"
+            >
+              Comprar
+            </button>
+          </article>
+        </div>
+
+        <button class="mv__nav mv__nav--next" aria-label="Avançar">›</button>
+      </div>
+    </section>
+
+    <section class="categories" aria-label="Compre por Categoria">
+      <h2 class="categories__title">Compre por Categoria</h2>
+
+      <div class="categories__grid">
+        <a href="#nuts" class="category-card">
+          <img src="./img/nuts.bio.jpg" alt="Nuts e Castanhas" />
+          <div class="category-overlay">
+            <span class="category-name">Nuts & Castanhas</span>
+            <span class="category-cta">Comprar agora</span>
+          </div>
+        </a>
+
+        <a href="#frutas" class="category-card">
+          <img src="./img/frutos secos.jpg" alt="Frutas Secas" />
+          <div class="category-overlay">
+            <span class="category-name">Frutas Secas</span>
+            <span class="category-cta">Comprar agora</span>
+          </div>
+        </a>
+
+        <a href="#suplementos" class="category-card">
+          <img src="./img/suplementos.jpg" alt="Suplementos" />
+          <div class="category-overlay">
+            <span class="category-name">Suplementos</span>
+            <span class="category-cta">Comprar agora</span>
+          </div>
+        </a>
+
+        <a href="#temperos" class="category-card">
+          <img src="./img/temperos.jpg" alt="Temperos Naturais" />
+          <div class="category-overlay">
+            <span class="category-name">Temperos</span>
+            <span class="category-cta">Comprar agora</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="reviews" aria-label="Quem já comprou e recomenda">
+      <div class="reviews__head">
+        <div class="reviews__title">
+          <span class="reviews__icon" aria-hidden="true">☆</span>
+          <h2>Avaliações de clientes</h2>
+        </div>
+      </div>
+
+      <div class="reviews__carousel">
+        <button class="reviews__nav reviews__nav--prev" aria-label="Voltar">
+          ‹
+        </button>
+
+        <div class="reviews__track" id="reviewsTrack">
+          <article class="review-card">
+            <p class="review-card__text">
+              <span class="quote" aria-hidden="true">“</span>
+              Pedido entregue dentro do prazo e muito bem embalado. Experiência
+              positiva do início ao fim.
+              <span class="quote" aria-hidden="true">”</span>
+            </p>
+
+            <div class="review-card__meta">
+              <div class="review-card__name">Cliente Verificado</div>
+              <div class="review-card__place">Brasília/DF</div>
+              <div class="review-card__stars" aria-label="5 estrelas">
+                ★★★★★
+              </div>
+            </div>
+          </article>
+
+          <article class="review-card">
+            <p class="review-card__text">
+              <span class="quote" aria-hidden="true">“</span>
+              Atendimento claro e eficiente. Os produtos chegaram em perfeito
+              estado.
+              <span class="quote" aria-hidden="true">”</span>
+            </p>
+
+            <div class="review-card__meta">
+              <div class="review-card__name">Comprador Online</div>
+              <div class="review-card__place">Campinas/SP</div>
+              <div class="review-card__stars" aria-label="5 estrelas">
+                ★★★★★
+              </div>
+            </div>
+          </article>
+
+          <article class="review-card">
+            <p class="review-card__text">
+              <span class="quote" aria-hidden="true">“</span>
+              Produtos de qualidade e entrega organizada. Voltaria a comprar sem
+              dúvida.
+              <span class="quote" aria-hidden="true">”</span>
+            </p>
+
+            <div class="review-card__meta">
+              <div class="review-card__name">Cliente Satisfeito</div>
+              <div class="review-card__place">Goiânia/GO</div>
+              <div class="review-card__stars" aria-label="5 estrelas">
+                ★★★★★
+              </div>
+            </div>
+          </article>
+
+          <article class="review-card">
+            <p class="review-card__text">
+              <span class="quote" aria-hidden="true">“</span>
+              Compra tranquila, site fácil de usar e entrega conforme prometido.
+              <span class="quote" aria-hidden="true">”</span>
+            </p>
+
+            <div class="review-card__meta">
+              <div class="review-card__name">Usuário Recorrente</div>
+              <div class="review-card__place">Brasília/DF</div>
+              <div class="review-card__stars" aria-label="5 estrelas">
+                ★★★★★
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <button class="reviews__nav reviews__nav--next" aria-label="Avançar">
+          ›
+        </button>
+      </div>
+    </section>
+
+    <section class="ig" aria-label="Depoimentos em vídeo">
+      <div class="ig__head">
+        <div class="ig__title">
+          <span class="ig__icon" aria-hidden="true">☆</span>
+          <h2>Quem já comprou e recomenda</h2>
+        </div>
+        <p class="ig__sub">Depoimentos reais direto do Instagram</p>
+      </div>
+
+      <div class="ig__carousel">
+        <button class="ig__nav ig__nav--prev" aria-label="Voltar">‹</button>
+
+        <div class="ig__track" id="igTrack">
+          <article class="ig-card">
+            <blockquote
+              class="instagram-media"
+              data-instgrm-permalink="https://www.instagram.com/reel/DUWkq9JDSNv/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+              data-instgrm-version="14"
+            ></blockquote>
+          </article>
+
+          <article class="ig-card">
+            <blockquote
+              class="instagram-media"
+              data-instgrm-permalink="https://www.instagram.com/reel/DTghb3vjW_M/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+              data-instgrm-version="14"
+            ></blockquote>
+          </article>
+
+          <article class="ig-card">
+            <blockquote
+              class="instagram-media"
+              data-instgrm-permalink="https://www.instagram.com/p/DUJxKCyDaJg/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+              data-instgrm-version="14"
+            ></blockquote>
+          </article>
+
+          <article class="ig-card">
+            <blockquote
+              class="instagram-media"
+              data-instgrm-permalink="https://www.instagram.com/reel/DTqoe-xkcQ7/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+              data-instgrm-version="14"
+            ></blockquote>
+          </article>
+        </div>
+
+        <button class="ig__nav ig__nav--next" aria-label="Avançar">›</button>
+      </div>
+    </section>
+
+    <section class="shelf" aria-label="Vitrines por categoria">
+      <!-- ===== CASTANHAS ===== -->
+      <div class="shelf__block" id="castanhas">
+        <div class="shelf__head">
+          <h2 class="shelf__title">Castanhas</h2>
+          <a class="shelf__link" href="#castanhas">Ver tudo</a>
+        </div>
+
+        <div class="shelf__carousel">
+          <div class="shelf__track">
+            <article class="pcard" data-product="Mix Premium Nuts">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img
+                class="pcard__img"
+                src="./frontend/img/maisVendidos/nutsmix.png"
+                alt="Mix Premium Nuts"
+              />
+              <h3 class="pcard__name">Mix Premium Nuts</h3>
+              <p class="pcard__meta">Natural • Selecionado</p>
+              <p class="pcard__meta">100g</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 53,90</span>
+              </div>
+
+              <!-- ✅ Comprar funcionando -->
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P001"
+                data-name="Mix Premium Nuts"
+                data-price="53.90"
+                data-img="./img/cartanha.png"
+              >
+                Comprar
+              </button>
+            </article>
+
+            <article class="pcard" data-product="Castanha do Pará">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img
+                class="pcard__img"
+                src="./img/prod-2.jpg"
+                alt="Castanha do Pará"
+              />
+              <h3 class="pcard__name">Castanha do Pará</h3>
+              <p class="pcard__meta">Inteira • Selecionada</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 64,90</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P002"
+                data-name="Castanha do Pará"
+                data-price="64.90"
+                data-img="./img/prod-2.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+
+            <article class="pcard" data-product="Castanha de Caju">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img
+                class="pcard__img"
+                src="./img/prod-3.jpg"
+                alt="Castanha de Caju"
+              />
+              <h3 class="pcard__name">Castanha de Caju</h3>
+              <p class="pcard__meta">Inteira • Torrada</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 18,90</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P003"
+                data-name="Castanha de Caju"
+                data-price="18.90"
+                data-img="./img/prod-3.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+
+            <article class="pcard" data-product="Pistache">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img class="pcard__img" src="./img/prod-4.jpg" alt="Pistache" />
+              <h3 class="pcard__name">Pistache</h3>
+              <p class="pcard__meta">Torrado • Selecionado</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 61,80</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P005"
+                data-name="Pistache"
+                data-price="61.80"
+                data-img="./img/prod-4.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+
+            <article class="pcard" data-product="Amêndoas">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img class="pcard__img" src="./img/prod-5.jpg" alt="Amêndoas" />
+              <h3 class="pcard__name">Amêndoas</h3>
+              <p class="pcard__meta">Inteiras • Selecionadas</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 68,10</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P004"
+                data-name="Amêndoas"
+                data-price="68.10"
+                data-img="./img/prod-5.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+
+            <article class="pcard" data-product="Farinha de Amêndoas">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img
+                class="pcard__img"
+                src="./img/prod-15.jpg"
+                alt="Farinha de Amêndoas"
+              />
+              <h3 class="pcard__name">Farinha de Amêndoas</h3>
+              <p class="pcard__meta">Fina • Sem glúten</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 16,50</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P017"
+                data-name="Farinha de Amêndoas"
+                data-price="16.50"
+                data-img="./img/prod-15.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== FRUTAS / DESIDRATADOS ===== -->
+      <div class="shelf__block" id="frutas">
+        <div class="shelf__head">
+          <h2 class="shelf__title">Frutas / Desidratados</h2>
+          <a class="shelf__link" href="#frutas">Ver tudo</a>
+        </div>
+
+        <div class="shelf__carousel">
+          <div class="shelf__track">
+            <article class="pcard" data-product="Banana Chips">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img
+                class="pcard__img"
+                src="./img/prod-6.jpg"
+                alt="Banana Chips"
+              />
+              <h3 class="pcard__name">Banana Chips</h3>
+              <p class="pcard__meta">Crocante • Natural</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 18,94</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P014"
+                data-name="Banana Chips"
+                data-price="18.94"
+                data-img="./img/prod-6.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+
+            <article class="pcard" data-product="Damasco">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img class="pcard__img" src="./img/prod-7.jpg" alt="Damasco" />
+              <h3 class="pcard__name">Damasco</h3>
+              <p class="pcard__meta">Doce • Selecionado</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 26,87</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P010"
+                data-name="Damasco"
+                data-price="26.87"
+                data-img="./img/prod-7.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+
+            <article class="pcard" data-product="Damasco">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img class="pcard__img" src="./img/prod-7.jpg" alt="Damasco" />
+              <h3 class="pcard__name">Damasco</h3>
+              <p class="pcard__meta">Doce • Selecionado</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 26,87</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P010"
+                data-name="Damasco"
+                data-price="26.87"
+                data-img="./img/prod-7.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+
+            <article class="pcard" data-product="Damasco">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img class="pcard__img" src="./img/prod-7.jpg" alt="Damasco" />
+              <h3 class="pcard__name">Damasco</h3>
+              <p class="pcard__meta">Doce • Selecionado</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 26,87</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P010"
+                data-name="Damasco"
+                data-price="26.87"
+                data-img="./img/prod-7.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+
+            <article class="pcard" data-product="Damasco">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img class="pcard__img" src="./img/prod-7.jpg" alt="Damasco" />
+              <h3 class="pcard__name">Damasco</h3>
+              <p class="pcard__meta">Doce • Selecionado</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 26,87</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P010"
+                data-name="Damasco"
+                data-price="26.87"
+                data-img="./img/prod-7.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+
+            <article class="pcard" data-product="Damasco">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img class="pcard__img" src="./img/prod-7.jpg" alt="Damasco" />
+              <h3 class="pcard__name">Damasco</h3>
+              <p class="pcard__meta">Doce • Selecionado</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 26,87</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P010"
+                data-name="Damasco"
+                data-price="26.87"
+                data-img="./img/prod-7.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== FARINÁCEOS ===== -->
+      <div class="shelf__block" id="farinaceos">
+        <div class="shelf__head">
+          <h2 class="shelf__title">Farináceos</h2>
+          <a class="shelf__link" href="#farinaceos">Ver tudo</a>
+        </div>
+
+        <div class="shelf__carousel">
+          <div class="shelf__track">
+            <article class="pcard" data-product="Farinha de Aveia">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img
+                class="pcard__img"
+                src="./img/prod-11.jpg"
+                alt="Farinha de Aveia"
+              />
+              <h3 class="pcard__name">Farinha de Aveia</h3>
+              <p class="pcard__meta">Fina • Natural</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 8,90</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P018"
+                data-name="Farinha de Aveia"
+                data-price="8.90"
+                data-img="./img/prod-11.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+            <article class="pcard" data-product="Farinha de Aveia">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img
+                class="pcard__img"
+                src="./img/prod-11.jpg"
+                alt="Farinha de Aveia"
+              />
+              <h3 class="pcard__name">Farinha de Aveia</h3>
+              <p class="pcard__meta">Fina • Natural</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 8,90</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P018"
+                data-name="Farinha de Aveia"
+                data-price="8.90"
+                data-img="./img/prod-11.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+            <article class="pcard" data-product="Farinha de Aveia">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img
+                class="pcard__img"
+                src="./img/prod-11.jpg"
+                alt="Farinha de Aveia"
+              />
+              <h3 class="pcard__name">Farinha de Aveia</h3>
+              <p class="pcard__meta">Fina • Natural</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 8,90</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P018"
+                data-name="Farinha de Aveia"
+                data-price="8.90"
+                data-img="./img/prod-11.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+            <article class="pcard" data-product="Farinha de Aveia">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img
+                class="pcard__img"
+                src="./img/prod-11.jpg"
+                alt="Farinha de Aveia"
+              />
+              <h3 class="pcard__name">Farinha de Aveia</h3>
+              <p class="pcard__meta">Fina • Natural</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 8,90</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P018"
+                data-name="Farinha de Aveia"
+                data-price="8.90"
+                data-img="./img/prod-11.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+            <article class="pcard" data-product="Farinha de Aveia">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img
+                class="pcard__img"
+                src="./img/prod-11.jpg"
+                alt="Farinha de Aveia"
+              />
+              <h3 class="pcard__name">Farinha de Aveia</h3>
+              <p class="pcard__meta">Fina • Natural</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 8,90</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P018"
+                data-name="Farinha de Aveia"
+                data-price="8.90"
+                data-img="./img/prod-11.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+            <article class="pcard" data-product="Farinha de Aveia">
+              <div class="pcard__top"><span class="ptag">Premium</span></div>
+              <img
+                class="pcard__img"
+                src="./img/prod-11.jpg"
+                alt="Farinha de Aveia"
+              />
+              <h3 class="pcard__name">Farinha de Aveia</h3>
+              <p class="pcard__meta">Fina • Natural</p>
+
+              <div class="pcard__row">
+                <span class="pcard__from">A partir de</span>
+                <span class="pcard__price">R$ 8,90</span>
+              </div>
+
+              <button
+                class="pcard__buy"
+                type="button"
+                data-add
+                data-id="P018"
+                data-name="Farinha de Aveia"
+                data-price="8.90"
+                data-img="./img/prod-11.jpg"
+              >
+                Comprar
+              </button>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer footer--lux" id="footer">
+      <div class="footer__container">
+        <div class="footer__brand">
+          <div class="footer__mark">
+            <span class="footer__logo">BioVida</span>
+            <span class="footer__badge">PREMIUM</span>
+          </div>
+
+          <p class="footer__slogan">
+            Produtos naturais e suplementação com curadoria, qualidade e padrão
+            premium.
+          </p>
+
+          <div class="footer__mini">
+            <span>Entrega para todo o Brasil</span>
+            <span class="dot">•</span>
+            <span>Atendimento humano</span>
+          </div>
+        </div>
+
+        <nav class="footer__col">
+          <h4 class="footer__title">Institucional</h4>
+          <ul class="footer__list">
+            <li><a href="/frontend/sobre.html">Sobre</a></li>
+            <li><a href="#">Lojas</a></li>
+            <li><a href="#">Política de Trocas</a></li>
+            <li><a href="#">Privacidade</a></li>
+          </ul>
+        </nav>
+
+        <nav class="footer__col">
+          <h4 class="footer__title">Categorias</h4>
+          <ul class="footer__list">
+            <li><a href="#">Castanhas & Snacks</a></li>
+            <li><a href="#">Suplementos</a></li>
+            <li><a href="#">Farináceos</a></li>
+            <li><a href="#">Kits</a></li>
+          </ul>
+        </nav>
+
+        <div class="footer__col">
+          <h4 class="footer__title">Atendimento</h4>
+
+          <div class="footer__contact">
+            <p>Brasília – DF</p>
+            <p>Seg a Sex · 9h–18h</p>
+            <a class="footer__contactLink" href="mailto:contato@biovida.com.br"
+              >contato@biovida.com.br</a
+            >
+            <a class="footer__cta" href="#" id="footerWhatsLink"
+              >Falar no WhatsApp</a
+            >
+          </div>
+
+          <div class="footer__social">
+            <a href="#" aria-label="Instagram">Instagram</a>
+            <a href="#" aria-label="TikTok">TikTok</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <div class="footer__bottomInner">
+          <p>© 2026 BioVida. Todos os direitos reservados.</p>
+          <p class="footer__made">
+            Desenvolvido por
+            <a
+              href="https://upclickweb.com.br"
+              target="_blank"
+              class="footer__agency"
+            >
+              UpClickWeb
+            </a>
+          </p>
+          <p class="footer__made">Feito com padrão premium.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ✅ Carrinho flutuante (substitui o WhatsApp fixo) -->
+    <button
+      class="cart-fab"
+      id="cartFab"
+      type="button"
+      aria-label="Abrir carrinho"
+    >
+      <span style="font-weight: 900">Carrinho</span>
+      <span class="cart-fab__count" id="cartCount">0</span>
+    </button>
+
+    <div class="overlay" id="overlay"></div>
+
+    <aside class="drawer" id="drawer" aria-label="Carrinho de compras">
+      <div class="drawer__head">
+        <h2 class="drawer__title">Seu carrinho</h2>
+        <button class="drawer__close" id="closeCart" type="button">✕</button>
+      </div>
+
+      <div class="drawer__body" id="cartItems"></div>
+
+      <div class="drawer__foot">
+        <div class="total">
+          <span>Total</span>
+          <span id="cartTotal">R$ 0,00</span>
+        </div>
+
+        <small
+          style="
+            display: block;
+            color: rgba(0, 0, 0, 0.62);
+            margin-bottom: 12px;
+            font-weight: 700;
+          "
+        >
+          Ao finalizar, você será direcionado para o checkout.
+        </small>
+
+        <button class="checkout" id="checkoutBtn" type="button">
+          Finalizar compra
+        </button>
+        <button class="clear" id="clearCart" type="button">
+          Limpar carrinho
+        </button>
+      </div>
+    </aside>
+
+    <!-- Script oficial do Instagram (necessário pro embed renderizar) -->
+    <script async src="https://www.instagram.com/embed.js"></script>
+
+    <script src="/frontend/script.js"></script>
+
+    <!-- ✅ Script do carrinho + Comprar indo direto pro checkout -->
+    <script>
+      const CHECKOUT_URL = "/frontend/checkout.html";
+      const storageKey = "biovida_cart_v1";
+
+      const fmt = (n) =>
+        n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+      const loadCart = () => {
+        try {
+          return JSON.parse(localStorage.getItem(storageKey)) || {};
+        } catch {
+          return {};
+        }
+      };
+      const saveCart = (cart) =>
+        localStorage.setItem(storageKey, JSON.stringify(cart));
+
+      let cart = loadCart();
+
+      // UI
+      const overlay = document.getElementById("overlay");
+      const drawer = document.getElementById("drawer");
+      const cartItems = document.getElementById("cartItems");
+      const cartTotal = document.getElementById("cartTotal");
+      const cartCount = document.getElementById("cartCount");
+      const cartFab = document.getElementById("cartFab");
+      const closeCart = document.getElementById("closeCart");
+      const clearCartBtn = document.getElementById("clearCart");
+      const checkoutBtn = document.getElementById("checkoutBtn");
+
+      function openCart() {
+        overlay.classList.add("is-open");
+        drawer.classList.add("is-open");
+      }
+      function closeCartUI() {
+        overlay.classList.remove("is-open");
+        drawer.classList.remove("is-open");
+      }
+
+      function qtyTotal() {
+        return Object.values(cart).reduce((acc, x) => acc + x.qty, 0);
+      }
+      function valueTotal() {
+        return Object.values(cart).reduce((acc, x) => acc + x.qty * x.price, 0);
+      }
+
+      function renderCart() {
+        const items = Object.values(cart);
+        cartCount.textContent = qtyTotal();
+
+        if (items.length === 0) {
+          cartItems.innerHTML = `<div class="empty">Seu carrinho está vazio.</div>`;
+          cartTotal.textContent = fmt(0);
+          return;
+        }
+
+        cartItems.innerHTML = items
+          .map(
+            (it) => `
+            <div class="cart-item">
+              <img class="cart-item__img" src="${it.img}" alt="${it.name}">
+              <div>
+                <p class="cart-item__name">${it.name}</p>
+                <div class="cart-item__meta">
+                  <span>${fmt(it.price)}</span>
+                  <span>${it.id}</span>
+                </div>
+
+                <div class="qty">
+                  <button type="button" data-dec="${it.id}">−</button>
+                  <span>${it.qty}</span>
+                  <button type="button" data-inc="${it.id}">+</button>
+                </div>
+
+                <button class="remove" type="button" data-rem="${it.id}">Remover</button>
+              </div>
+            </div>
+          `,
+          )
+          .join("");
+
+        cartTotal.textContent = fmt(valueTotal());
+      }
+
+      function addItem({ id, name, price, img }) {
+        if (!id || !name || !price) return;
+
+        const p = Number(price);
+        if (Number.isNaN(p)) return;
+
+        if (!cart[id]) {
+          cart[id] = {
+            id,
+            name,
+            price: p,
+            img: img || "/frontend/img/nuts.bio.jpg",
+            qty: 1,
+          };
+        } else {
+          cart[id].qty += 1;
+        }
+
+        saveCart(cart);
+        renderCart();
+      }
+
+      function inc(id) {
+        if (!cart[id]) return;
+        cart[id].qty += 1;
+        saveCart(cart);
+        renderCart();
+      }
+      function dec(id) {
+        if (!cart[id]) return;
+        cart[id].qty -= 1;
+        if (cart[id].qty <= 0) delete cart[id];
+        saveCart(cart);
+        renderCart();
+      }
+      function rem(id) {
+        if (!cart[id]) return;
+        delete cart[id];
+        saveCart(cart);
+        renderCart();
+      }
+
+      // ✅ Clique em qualquer botão com [data-add] -> adiciona e vai pro checkout
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-add]");
+        if (!btn) return;
+
+        e.preventDefault();
+
+        addItem({
+          id: btn.dataset.id,
+          name: btn.dataset.name,
+          price: btn.dataset.price,
+          img: btn.dataset.img,
+        });
+
+        window.location.href = CHECKOUT_URL;
+      });
+
+      // Drawer open/close
+      cartFab?.addEventListener("click", openCart);
+      closeCart?.addEventListener("click", closeCartUI);
+      overlay?.addEventListener("click", closeCartUI);
+
+      // Drawer actions
+      cartItems?.addEventListener("click", (e) => {
+        const a = e.target.closest("[data-inc]");
+        const b = e.target.closest("[data-dec]");
+        const c = e.target.closest("[data-rem]");
+        if (a) inc(a.dataset.inc);
+        if (b) dec(b.dataset.dec);
+        if (c) rem(c.dataset.rem);
+      });
+
+      clearCartBtn?.addEventListener("click", () => {
+        cart = {};
+        saveCart(cart);
+        renderCart();
+      });
+
+      checkoutBtn?.addEventListener("click", () => {
+        if (Object.values(cart).length === 0) {
+          alert("Seu carrinho está vazio.");
+          return;
+        }
+        window.location.href = CHECKOUT_URL;
+      });
+
+      // init
+      renderCart();
+    </script>
+  </body>
+</html>

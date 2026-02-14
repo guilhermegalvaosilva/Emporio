@@ -1,0 +1,27 @@
+.topbar {
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.topbar .frete-gratis {
+  margin: 0;
+  padding: 10px 16px;
+  text-align: center;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  color: rgba(0, 0, 0, 0.72);
+}
+
+.topbar .frete-gratis strong {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.88);
+}

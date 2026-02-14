@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/frontend/style.css" />
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav__wrap">
+        <!-- Menu esquerdo -->
+        <nav class="nav__side nav__side--left">
+          <a href="/index.html" class="nav__link">HOME</a>
+          <a href="/frontend/produtos.html" class="nav__link">PRODUTOS</a>
+        </nav>
+
+        <!-- Logo central BioVida -->
+        <a
+          href="/frontend/index.html"
+          class="brand"
+          aria-label="Empório BioVida"
+        >
+          <span class="brand__emp">EMPÓRIO</span>
+          <span class="brand__name">
+            <span class="brand__bio">Bio</span
+            ><span class="brand__vida">Vida</span>
+          </span>
+          <span class="brand__sub">PRODUTOS NATURAIS</span>
+        </a>
+
+        <!-- Menu direito (se tiver) -->
+        <nav class="nav__side nav__side--right">
+          <a href="/frontend/sobre.html" class="nav__link">SOBRE</a>
+          <a href="#" class="nav__link">CONTATO</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="sobre" id="sobre">
+      <div class="sobre__wrap">
+        <p class="sobre__kicker">About</p>
+        <h2 class="sobre__title">Sobre a BioVida</h2>
+
+        <p class="sobre__lead">
+          A BioVida nasceu com um propósito simples e essencial: levar alimentos
+          naturais, selecionados e de alta qualidade para quem valoriza saúde,
+          bem-estar e equilíbrio no dia a dia.
+        </p>
+
+        <div class="sobre__cta">
+          <a
+            class="sbtn sbtn--primary"
+            href="https://wa.me/55SEUNUMERO"
+            target="_blank"
+            rel="noopener"
+          >
+            Falar no WhatsApp
+          </a>
+          <a class="sbtn" href="/frontend/index.html#mais-vendidos">
+            Ver produtos
+          </a>
+        </div>
+
+        <!-- stats com contador animado -->
+        <div class="sobre__stats" aria-label="Números da BioVida">
+          <div class="sstat">
+            <div class="sstat__value">
+              <span class="count" data-to="120">0</span>+
+            </div>
+            <div class="sstat__label">Itens selecionados</div>
+          </div>
+          <div class="sstat">
+            <div class="sstat__value">
+              <span class="count" data-to="24">0</span>h
+            </div>
+            <div class="sstat__label">Atendimento ágil</div>
+          </div>
+          <div class="sstat">
+            <div class="sstat__value">
+              <span class="count" data-to="4.9">0</span>/5
+            </div>
+            <div class="sstat__label">Satisfação média</div>
+          </div>
+          <div class="sstat">
+            <div class="sstat__value">
+              <span class="count" data-to="100">0</span>%
+            </div>
+            <div class="sstat__label">Foco em qualidade</div>
+          </div>
+        </div>
+
+        <!-- cards valores -->
+        <div class="sobre__grid" aria-label="Nossos pilares">
+          <article class="sbox">
+            <h3 class="sbox__title">Curadoria premium</h3>
+            <p class="sbox__text">
+              Castanhas, frutas desidratadas, farináceos e suplementação com
+              seleção rigorosa de sabor, frescor e padrão.
+            </p>
+          </article>
+
+          <article class="sbox">
+            <h3 class="sbox__title">Procedência & confiança</h3>
+            <p class="sbox__text">
+              Priorizamos origem, pureza e consistência. Aqui você compra com
+              tranquilidade e transparência.
+            </p>
+          </article>
+
+          <article class="sbox">
+            <h3 class="sbox__title">Vida real, rotina real</h3>
+            <p class="sbox__text">
+              Produtos práticos para o seu dia: lanche, energia, foco e
+              bem-estar — sem complicação.
+            </p>
+          </article>
+
+          <article class="sbox">
+            <h3 class="sbox__title">Atendimento humano</h3>
+            <p class="sbox__text">
+              A gente te ajuda a escolher melhor. Dúvidas? Sugestões? Chama no
+              WhatsApp.
+            </p>
+          </article>
+        </div>
+
+        <!-- FAQ Accordion -->
+        <div class="sobre__faq" aria-label="Perguntas frequentes">
+          <h3 class="sobre__subtitle">Dúvidas rápidas</h3>
+
+          <button class="faq" type="button" aria-expanded="false">
+            <span class="faq__q">Como faço um pedido?</span>
+            <span class="faq__ico">+</span>
+          </button>
+          <div class="faq__a">
+            Você pode comprar pelo site e também chamar no WhatsApp para montar
+            seu pedido com recomendações.
+          </div>
+
+          <button class="faq" type="button" aria-expanded="false">
+            <span class="faq__q">Os produtos são selecionados?</span>
+            <span class="faq__ico">+</span>
+          </button>
+          <div class="faq__a">
+            Sim. Trabalhamos com curadoria: priorizamos frescor, padrão e
+            procedência para manter consistência de qualidade.
+          </div>
+
+          <button class="faq" type="button" aria-expanded="false">
+            <span class="faq__q">Tem entrega e retirada?</span>
+            <span class="faq__ico">+</span>
+          </button>
+          <div class="faq__a">
+            Dependendo da sua região, oferecemos entrega e/ou retirada. Fale no
+            WhatsApp para confirmar disponibilidade.
+          </div>
+        </div>
+      </div>
+    </section>
+    <script>
+      // Accordion FAQ
+      document.querySelectorAll(".faq").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const expanded = btn.getAttribute("aria-expanded") === "true";
+          const answer = btn.nextElementSibling;
+          btn.setAttribute("aria-expanded", String(!expanded));
+          btn.querySelector(".faq__ico").textContent = expanded ? "+" : "–";
+          answer.style.display = expanded ? "none" : "block";
+        });
+      });
+
+      // Contador animado (quando a seção aparece)
+      const section = document.querySelector("#sobre");
+      const counters = document.querySelectorAll("#sobre .count");
+      let played = false;
+
+      function animateCount(el, to) {
+        const isFloat = String(to).includes(".");
+        const duration = 900;
+        const start = performance.now();
+
+        function tick(t) {
+          const p = Math.min((t - start) / duration, 1);
+          const val = isFloat ? (to * p).toFixed(1) : Math.floor(to * p);
+          el.textContent = val;
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting && !played) {
+              played = true;
+              counters.forEach((el) => animateCount(el, Number(el.dataset.to)));
+              io.disconnect();
+            }
+          });
+        },
+        { threshold: 0.35 },
+      );
+
+      if (section) io.observe(section);
+    </script>
+  </body>
+</html>

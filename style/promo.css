@@ -1,0 +1,80 @@
+/* =========================
+   SEÇÃO
+========================= */
+.promo {
+  background: #fff;
+}
+
+.promo__wrap {
+  max-width: 1600px; /* largura maior */
+  margin: 0 auto;
+  padding: 22px 24px 16px;
+}
+
+/* =========================
+   GRID (3 lado a lado)
+========================= */
+.promo__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+/* =========================
+   CARD (premium, reto)
+========================= */
+.promo__card {
+  display: block;
+
+  border-radius: 0 !important;
+  overflow: hidden;
+  background: #fff;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.promo__card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+/* =========================
+   IMAGEM (sem estourar)
+========================= */
+.promo__card img {
+  width: 100%;
+  height: 340px;
+  object-fit: contain;
+  background: #ffffff;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+@media (max-width: 1100px) {
+  .promo__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .promo__card img {
+    height: 280px;
+  }
+}
+
+@media (max-width: 640px) {
+  .promo__wrap {
+    padding: 16px;
+  }
+
+  .promo__grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .promo__card img {
+    height: 220px;
+  }
+}

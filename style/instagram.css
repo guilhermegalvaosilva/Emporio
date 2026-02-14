@@ -1,0 +1,100 @@
+.ig {
+  padding: 46px 16px;
+  background: #fff;
+}
+
+.ig__head {
+  max-width: 1200px;
+  margin: 0 auto 18px;
+  text-align: center;
+}
+
+.ig__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ig__icon {
+  font-size: 22px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.ig__title h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+}
+
+.ig__sub {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* carrossel */
+.ig__carousel {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.ig__track {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px 8px;
+}
+
+.ig__track::-webkit-scrollbar {
+  display: none;
+}
+
+/* setas */
+.ig__nav {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  font-size: 26px;
+  cursor: pointer;
+  z-index: 5;
+}
+.ig__nav--prev {
+  left: -8px;
+}
+.ig__nav--next {
+  right: -8px;
+}
+
+@media (max-width: 640px) {
+  .ig__nav {
+    display: none;
+  }
+}
+
+/* card premium */
+.ig-card {
+  min-width: 320px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 14px 38px rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  overflow: hidden;
+  padding: 10px;
+}
+
+/* deixa o embed “respirar” e ficar alinhado */
+.ig-card .instagram-media {
+  margin: 0 !important;
+  width: 100% !important;
+  min-width: auto !important;
+}

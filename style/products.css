@@ -1,0 +1,231 @@
+.mv {
+  padding: 44px 16px;
+  background: #fff;
+}
+
+.mv__head {
+  max-width: 1200px;
+  margin: 0 auto 18px;
+  text-align: center;
+}
+
+.mv__title {
+  font-size: 30px;
+  font-weight: 850;
+  letter-spacing: 0.2px;
+  margin: 0;
+}
+
+.mv__subtitle {
+  margin: 8px 0 0;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 14px;
+}
+
+.mv__carousel {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mv__track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 12px 10px 10px;
+}
+
+.mv__track::-webkit-scrollbar {
+  display: none;
+}
+
+.mv__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  font-size: 26px;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.mv__nav--prev {
+  left: -8px;
+}
+.mv__nav--next {
+  right: -8px;
+}
+
+@media (max-width: 640px) {
+  .mv__nav {
+    display: none;
+  }
+}
+
+/* ===== Card Premium Minimal ===== */
+.card {
+  min-width: 238px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.07);
+  padding: 14px;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  border-color: rgba(20, 138, 42, 0.2);
+}
+
+.card__top {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(20, 138, 42, 0.1);
+  color: #148a2a;
+  border: 1px solid rgba(20, 138, 42, 0.18);
+}
+
+.card__img {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  display: block;
+  margin: 8px 0 6px;
+}
+
+.card__name {
+  margin: 6px 0 2px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.15px;
+}
+
+.card__desc {
+  margin: 0 0 10px;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12.5px;
+}
+
+.card__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.card__from {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.card__price {
+  font-size: 16px;
+  font-weight: 900;
+  color: #148a2a;
+}
+
+/* pills (peso) */
+.card__weights {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.pill {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.pill:hover {
+  border-color: rgba(20, 138, 42, 0.25);
+}
+
+.pill.is-active {
+  background: rgba(20, 138, 42, 0.1);
+  border-color: rgba(20, 138, 42, 0.28);
+  color: #148a2a;
+  font-weight: 800;
+}
+
+/* botões minimal premium */
+.btn {
+  width: 100%;
+  height: 42px;
+  border-radius: 12px;
+  font-weight: 850;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.btn--buy {
+  background: #0f172a; /* preto premium */
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.btn--buy:hover {
+  opacity: 0.92;
+}
+
+.btn--wa {
+  background: #fff;
+  color: #148a2a;
+  border-color: rgba(20, 138, 42, 0.35);
+}
+
+.btn--wa:hover {
+  background: rgba(20, 138, 42, 0.06);
+}
+
+/* Botão WhatsApp do card — premium minimal */
+.card__wa {
+  height: 44px;
+  border-radius: 12px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(20, 138, 42, 0.35);
+  background: rgba(20, 138, 42, 0.06);
+  color: #148a2a;
+}
+
+.card__wa:hover {
+  background: rgba(20, 138, 42, 0.1);
+  border-color: rgba(20, 138, 42, 0.55);
+}
