@@ -2,6 +2,7 @@
   width: 100%;
 }
 
+/* slider */
 .hero__slider {
   position: relative;
   height: min(78vh, 760px);
@@ -9,10 +10,13 @@
   overflow: hidden;
 }
 
+/* ✅ importante: referência pros slides absolutos */
 .hero__track {
+  position: relative;
   height: 100%;
 }
 
+/* slides */
 .hero__slide {
   position: absolute;
   inset: 0;
@@ -24,6 +28,7 @@
   background-image: var(--bg);
   background-size: cover;
   background-position: center;
+  z-index: 0; /* ✅ garante ordem */
 }
 
 .hero__slide.is-active {
@@ -31,18 +36,20 @@
   transform: scale(1);
 }
 
-/* overlay: deixa o texto sempre legível */
+/* overlay */
 .hero__overlay {
   position: absolute;
   inset: 0;
+  z-index: 1; /* ✅ acima do slide */
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.4),
+    rgba(0, 0, 0, 0.45),
     rgba(0, 0, 0, 0.18) 40%,
-    rgba(0, 0, 0, 0.55)
+    rgba(0, 0, 0, 0.62)
   );
 }
 
+/* conteúdo */
 .hero__content {
   position: absolute;
   inset: 0;
@@ -52,14 +59,16 @@
   padding: 56px 20px;
   text-align: center;
   color: #fff;
-  z-index: 2;
+  z-index: 2; /* ✅ acima do overlay */
 }
 
+/* tipografia: mais “premium” na leitura em cima de foto */
 .hero__title {
   margin: 0;
   font-size: clamp(34px, 6vw, 74px);
   font-weight: 760;
   letter-spacing: 0.4px;
+  text-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
 }
 
 .hero__subtitle {
@@ -67,6 +76,7 @@
   font-size: clamp(15px, 2vw, 22px);
   opacity: 0.95;
   max-width: 920px;
+  text-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
 }
 
 .hero__actions {
@@ -77,6 +87,7 @@
   justify-content: center;
 }
 
+/* botões */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -88,18 +99,39 @@
   font-weight: 650;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition:
+    transform 0.12s ease,
+    opacity 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.btn:hover {
+  opacity: 0.96;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:focus-visible,
+.hero__nav:focus-visible,
+.hero__dot:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.75);
+  outline-offset: 3px;
 }
 
 .btn--primary {
   background: rgba(22, 163, 74, 0.95); /* verde BioVida */
   color: #fff;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
 }
 
 .btn--ghost {
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.9);
   color: #111;
 }
 
+/* nota */
 .hero__note {
   margin-top: 12px;
   font-size: 12px;
@@ -115,11 +147,21 @@
   height: 46px;
   border-radius: 12px;
   border: 0;
-  background: rgba(255, 255, 255, 0.86);
+  background: rgba(255, 255, 255, 0.9);
   color: #111;
   font-size: 28px;
   cursor: pointer;
   z-index: 3;
+  transition:
+    transform 0.12s ease,
+    opacity 0.12s ease;
+}
+
+.hero__nav:hover {
+  opacity: 0.92;
+}
+.hero__nav:active {
+  transform: translateY(-50%) translateY(1px);
 }
 
 .hero__nav--prev {
@@ -147,12 +189,19 @@
   border: 0;
   background: rgba(255, 255, 255, 0.55);
   cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    background 0.12s ease;
 }
 
+.hero__dot:hover {
+  transform: scale(1.12);
+}
 .hero__dot.is-active {
   background: rgba(255, 255, 255, 0.95);
 }
 
+/* mobile */
 @media (max-width: 520px) {
   .hero__slider {
     border-radius: 14px;
@@ -160,5 +209,18 @@
   .hero__nav {
     width: 40px;
     height: 40px;
+  }
+}
+
+/* acessibilidade: reduz animações quando usuário prefere */
+@media (prefers-reduced-motion: reduce) {
+  .hero__slide {
+    transition: none;
+    transform: none;
+  }
+  .btn,
+  .hero__nav,
+  .hero__dot {
+    transition: none;
   }
 }

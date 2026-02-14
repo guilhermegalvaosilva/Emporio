@@ -1,21 +1,23 @@
-const linkVendidos = document.querySelector(".catbar__link--hot");
-const secVendidos = document.getElementById("maisVendidos");
+/* =========================
+   + VENDIDOS (corrigido)
+========================= */
+(() => {
+  const linkVendidos = document.querySelector(".catbar__link--hot");
+  const secVendidos =
+    document.getElementById("mais-vendidos") ||
+    document.getElementById("maisVendidos");
 
-// Se não tiver seção, deixa o link funcionar normalmente (vai para mais-vendidos.html)
-if (linkVendidos && secVendidos) {
+  if (!linkVendidos || !secVendidos) return;
+
   linkVendidos.addEventListener("click", (e) => {
     e.preventDefault();
-
-    const abrir = !secVendidos.classList.contains("ativo");
-    secVendidos.classList.toggle("ativo", abrir);
-    secVendidos.setAttribute("aria-hidden", String(!abrir));
-
-    if (abrir) {
-      secVendidos.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    secVendidos.scrollIntoView({ behavior: "smooth", block: "start" });
   });
-}
+})();
 
+/* =========================
+   HERO SLIDER (seguro)
+========================= */
 (() => {
   const slider = document.getElementById("heroSlider");
   if (!slider) return;
@@ -25,6 +27,8 @@ if (linkVendidos && secVendidos) {
   const prevBtn = slider.querySelector(".hero__nav--prev");
   const nextBtn = slider.querySelector(".hero__nav--next");
 
+  if (!slides.length || !dotsWrap || !prevBtn || !nextBtn) return;
+
   const titleEl = document.getElementById("heroTitle");
   const subtitleEl = document.getElementById("heroSubtitle");
 
@@ -32,7 +36,7 @@ if (linkVendidos && secVendidos) {
   let timer = null;
   const AUTOPLAY_MS = 5500;
 
-  // dots
+  dotsWrap.innerHTML = "";
   slides.forEach((_, i) => {
     const b = document.createElement("button");
     b.className = "hero__dot" + (i === 0 ? " is-active" : "");
@@ -47,8 +51,8 @@ if (linkVendidos && secVendidos) {
     const active = slides[index];
     const t = active.getAttribute("data-title") || "BioVida";
     const s = active.getAttribute("data-subtitle") || "";
-    titleEl.textContent = t;
-    subtitleEl.textContent = s;
+    if (titleEl) titleEl.textContent = t;
+    if (subtitleEl) subtitleEl.textContent = s;
   }
 
   function render() {
@@ -92,236 +96,253 @@ if (linkVendidos && secVendidos) {
   start();
 })();
 
-(() => {
-  const slider = document.getElementById("promoSlider");
-  if (!slider) return;
-
-  const slides = Array.from(slider.querySelectorAll(".promo__slide"));
-  const prevBtn = slider.querySelector(".promo__nav--prev");
-  const nextBtn = slider.querySelector(".promo__nav--next");
-  const bar = document.getElementById("promoBar");
-  const ticks = document.getElementById("promoTicks");
-
-  // cria divisórias conforme quantidade
-  ticks.innerHTML = "";
-  slides.forEach(() => ticks.appendChild(document.createElement("span")));
-
-  let index = 0;
-  let timer = null;
-  const DURATION = 5200; // tempo de cada banner
-
-  function render() {
-    slides.forEach((s, i) => s.classList.toggle("is-active", i === index));
-    restartProgress();
-  }
-
-  function goTo(i) {
-    index = (i + slides.length) % slides.length;
-    render();
-    restartAuto();
-  }
-
-  function next() {
-    goTo(index + 1);
-  }
-  function prev() {
-    goTo(index - 1);
-  }
-
-  function startAuto() {
-    timer = setInterval(next, DURATION);
-  }
-
-  function stopAuto() {
-    if (timer) clearInterval(timer);
-    timer = null;
-  }
-
-  function restartAuto() {
-    stopAuto();
-    startAuto();
-  }
-
-  // barra animada
-  function restartProgress() {
-    if (!bar) return;
-    bar.style.transition = "none";
-    bar.style.width = "0%";
-    // força repaint
-    bar.offsetHeight;
-    bar.style.transition = `width ${DURATION}ms linear`;
-    bar.style.width = "100%";
-  }
-
-  prevBtn.addEventListener("click", prev);
-  nextBtn.addEventListener("click", next);
-
-  // pausa no hover (premium)
-  slider.addEventListener("mouseenter", () => {
-    stopAuto();
-    if (bar) bar.style.transition = "none";
-  });
-
-  slider.addEventListener("mouseleave", () => {
-    restartProgress();
-    startAuto();
-  });
-
-  render();
-  startAuto();
-})();
-
-const track = document.querySelector(".products__track");
-const prev = document.querySelector(".products__nav--prev");
-const next = document.querySelector(".products__nav--next");
-
-if (track && prev && next) {
-  next.addEventListener("click", () => {
-    track.scrollBy({ left: 300, behavior: "smooth" });
-  });
-
-  prev.addEventListener("click", () => {
-    track.scrollBy({ left: -300, behavior: "smooth" });
-  });
-}
-
+/* =========================
+   MV (carrossel setas)
+========================= */
 document.addEventListener("DOMContentLoaded", () => {
-  // ===== Carrossel (setas) =====
   const track = document.getElementById("mvTrack");
   const prev = document.querySelector(".mv__nav--prev");
   const next = document.querySelector(".mv__nav--next");
 
-  if (track && prev && next) {
-    next.addEventListener("click", () => {
-      track.scrollBy({ left: 340, behavior: "smooth" });
-    });
+  if (!track || !prev || !next) return;
 
-    prev.addEventListener("click", () => {
-      track.scrollBy({ left: -340, behavior: "smooth" });
-    });
-  }
+  next.addEventListener("click", () => {
+    track.scrollBy({ left: 340, behavior: "smooth" });
+  });
 
-  // ===== Pills (peso) + WhatsApp dinâmico =====
-  const WHATSAPP_NUMBER = "55SEUNUMERO"; // <-- TROCA AQUI (ex: 5561999999999)
-
-  document.querySelectorAll(".card").forEach((card) => {
-    const pills = card.querySelectorAll(".pill");
-    const waBtn = card.querySelector(".card__wa");
-
-    function updateWhatsAppLink() {
-      const product = card.getAttribute("data-product") || "Produto";
-      const weight = card.getAttribute("data-weight") || "";
-      const msg = `Olá! Quero pedir: ${product}${weight ? ` (${weight})` : ""}.`;
-      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-      if (waBtn) waBtn.href = url;
-    }
-
-    // inicializa link
-    updateWhatsAppLink();
-
-    pills.forEach((p) => {
-      p.addEventListener("click", () => {
-        // marca ativo
-        pills.forEach((x) => x.classList.remove("is-active"));
-        p.classList.add("is-active");
-
-        // salva peso no card
-        const w = p.getAttribute("data-weight") || p.textContent.trim();
-        card.setAttribute("data-weight", w);
-
-        // atualiza link do WhatsApp
-        updateWhatsAppLink();
-      });
-    });
+  prev.addEventListener("click", () => {
+    track.scrollBy({ left: -340, behavior: "smooth" });
   });
 });
 
+/* =========================
+   REVIEWS (carrossel)
+========================= */
 document.addEventListener("DOMContentLoaded", () => {
   const track = document.getElementById("reviewsTrack");
   const prev = document.querySelector(".reviews__nav--prev");
   const next = document.querySelector(".reviews__nav--next");
 
-  if (track && prev && next) {
-    next.addEventListener("click", () => {
-      track.scrollBy({ left: 320, behavior: "smooth" });
-    });
+  if (!track || !prev || !next) return;
 
-    prev.addEventListener("click", () => {
-      track.scrollBy({ left: -320, behavior: "smooth" });
-    });
-  }
+  next.addEventListener("click", () => {
+    track.scrollBy({ left: 320, behavior: "smooth" });
+  });
+
+  prev.addEventListener("click", () => {
+    track.scrollBy({ left: -320, behavior: "smooth" });
+  });
 });
 
+/* =========================
+   IG (carrossel)
+========================= */
 document.addEventListener("DOMContentLoaded", () => {
   const track = document.getElementById("igTrack");
   const prev = document.querySelector(".ig__nav--prev");
   const next = document.querySelector(".ig__nav--next");
 
-  if (track && prev && next) {
-    next.addEventListener("click", () => {
-      track.scrollBy({ left: 360, behavior: "smooth" });
-    });
-    prev.addEventListener("click", () => {
-      track.scrollBy({ left: -360, behavior: "smooth" });
-    });
-  }
+  if (!track || !prev || !next) return;
+
+  next.addEventListener("click", () => {
+    track.scrollBy({ left: 360, behavior: "smooth" });
+  });
+  prev.addEventListener("click", () => {
+    track.scrollBy({ left: -360, behavior: "smooth" });
+  });
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  // ===== Setas: funcionam em qualquer prateleira =====
-  document.querySelectorAll(".shelf__nav").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-target");
-      const track = document.getElementById(id);
-      if (!track) return;
+/* =========================
+   WHATSAPP (footer)
+========================= */
+(() => {
+  const phone = "5561999999999"; // DDI + DDD + número
+  const msg = "Olá! Quero fazer um pedido na BioVida.";
+  const link = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
 
-      const dir = btn.classList.contains("shelf__nav--next") ? 1 : -1;
-      track.scrollBy({ left: 340 * dir, behavior: "smooth" });
-    });
-  });
+  const footerBtn = document.getElementById("footerWhatsLink");
+  if (footerBtn) footerBtn.href = link;
+})();
 
-  // ===== WhatsApp dinâmico + pills =====
-  const WHATSAPP_NUMBER = "55SEUNUMERO"; // ex: 5561999999999
+/* =========================
+   CARRINHO (principal)
+   - Comprar adiciona e abre drawer
+   - Finalizar compra vai pro checkout
+========================= */
+(() => {
+  const CHECKOUT_URL = "/checkout.html";
+  const storageKey = "biovida_cart_v1";
 
-  document.querySelectorAll(".pcard").forEach((card) => {
-    const pills = card.querySelectorAll(".ppill");
-    const wa = card.querySelector(".pcard__wa");
+  const fmt = (n) =>
+    n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-    function updateWA() {
-      const product = card.getAttribute("data-product") || "Produto";
-      const weight = card.getAttribute("data-weight") || "";
-      const msg = `Olá! Quero pedir: ${product}${weight ? ` (${weight})` : ""}.`;
-      if (wa)
-        wa.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  const loadCart = () => {
+    try {
+      return JSON.parse(localStorage.getItem(storageKey)) || {};
+    } catch {
+      return {};
+    }
+  };
+  const saveCart = (cart) =>
+    localStorage.setItem(storageKey, JSON.stringify(cart));
+
+  let cart = loadCart();
+
+  // UI
+  const overlay = document.getElementById("overlay");
+  const drawer = document.getElementById("drawer");
+  const cartItems = document.getElementById("cartItems");
+  const cartTotal = document.getElementById("cartTotal");
+  const cartCount = document.getElementById("cartCount");
+  const cartFab = document.getElementById("cartFab");
+  const closeCart = document.getElementById("closeCart");
+  const clearCartBtn = document.getElementById("clearCart");
+  const checkoutBtn = document.getElementById("checkoutBtn");
+
+  if (!overlay || !drawer || !cartItems || !cartTotal || !cartCount) return;
+
+  function openCart() {
+    overlay.classList.add("is-open");
+    drawer.classList.add("is-open");
+  }
+  function closeCartUI() {
+    overlay.classList.remove("is-open");
+    drawer.classList.remove("is-open");
+  }
+
+  function qtyTotal() {
+    return Object.values(cart).reduce((acc, x) => acc + x.qty, 0);
+  }
+  function valueTotal() {
+    return Object.values(cart).reduce((acc, x) => acc + x.qty * x.price, 0);
+  }
+
+  function renderCart() {
+    const items = Object.values(cart);
+    cartCount.textContent = qtyTotal();
+
+    if (items.length === 0) {
+      cartItems.innerHTML = `<div class="empty">Seu carrinho está vazio.</div>`;
+      cartTotal.textContent = fmt(0);
+      return;
     }
 
-    updateWA();
+    cartItems.innerHTML = items
+      .map(
+        (it) => `
+          <div class="cart-item">
+            <img class="cart-item__img" src="${it.img}" alt="${it.name}">
+            <div>
+              <p class="cart-item__name">${it.name}</p>
+              <div class="cart-item__meta">
+                <span>${fmt(it.price)}</span>
+                <span>${it.id}</span>
+              </div>
 
-    pills.forEach((p) => {
-      p.addEventListener("click", () => {
-        pills.forEach((x) => x.classList.remove("is-active"));
-        p.classList.add("is-active");
-        card.setAttribute(
-          "data-weight",
-          p.getAttribute("data-weight") || p.textContent.trim(),
-        );
-        updateWA();
-      });
+              <div class="qty">
+                <button type="button" data-dec="${it.id}">−</button>
+                <span>${it.qty}</span>
+                <button type="button" data-inc="${it.id}">+</button>
+              </div>
+
+              <button class="remove" type="button" data-rem="${it.id}">Remover</button>
+            </div>
+          </div>
+        `,
+      )
+      .join("");
+
+    cartTotal.textContent = fmt(valueTotal());
+  }
+
+  function addItem({ id, name, price, img }) {
+    if (!id || !name || !price) return;
+
+    const p = Number(price);
+    if (Number.isNaN(p)) return;
+
+    if (!cart[id]) {
+      cart[id] = {
+        id,
+        name,
+        price: p,
+        img: img || "/img/nuts.bio.jpg",
+        qty: 1,
+      };
+    } else {
+      cart[id].qty += 1;
+    }
+
+    saveCart(cart);
+    renderCart();
+  }
+
+  function inc(id) {
+    if (!cart[id]) return;
+    cart[id].qty += 1;
+    saveCart(cart);
+    renderCart();
+  }
+  function dec(id) {
+    if (!cart[id]) return;
+    cart[id].qty -= 1;
+    if (cart[id].qty <= 0) delete cart[id];
+    saveCart(cart);
+    renderCart();
+  }
+  function rem(id) {
+    if (!cart[id]) return;
+    delete cart[id];
+    saveCart(cart);
+    renderCart();
+  }
+
+  // ✅ Clique em qualquer botão com [data-add] -> adiciona e abre carrinho
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-add]");
+    if (!btn) return;
+
+    e.preventDefault();
+
+    addItem({
+      id: btn.dataset.id,
+      name: btn.dataset.name,
+      price: btn.dataset.price,
+      img: btn.dataset.img,
     });
+
+    openCart();
   });
-});
 
-document.addEventListener("DOMContentLoaded", () => {
-  const el = document.getElementById("yearNow");
-  if (el) el.textContent = new Date().getFullYear();
-});
+  // Drawer open/close
+  cartFab?.addEventListener("click", openCart);
+  closeCart?.addEventListener("click", closeCartUI);
+  overlay?.addEventListener("click", closeCartUI);
 
-const phone = "5561999999999"; // DDI + DDD + número (sem espaços)
-const msg = "Olá! Quero fazer um pedido na BioVida.";
-const link = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+  // Drawer actions
+  cartItems?.addEventListener("click", (e) => {
+    const a = e.target.closest("[data-inc]");
+    const b = e.target.closest("[data-dec]");
+    const c = e.target.closest("[data-rem]");
+    if (a) inc(a.dataset.inc);
+    if (b) dec(b.dataset.dec);
+    if (c) rem(c.dataset.rem);
+  });
 
-const floatBtn = document.getElementById("wppFloat");
-const footerBtn = document.getElementById("footerWhatsLink");
+  clearCartBtn?.addEventListener("click", () => {
+    cart = {};
+    saveCart(cart);
+    renderCart();
+  });
 
-if (floatBtn) floatBtn.href = link;
-if (footerBtn) footerBtn.href = link;
+  checkoutBtn?.addEventListener("click", () => {
+    if (Object.values(cart).length === 0) {
+      alert("Seu carrinho está vazio.");
+      return;
+    }
+    window.location.href = CHECKOUT_URL;
+  });
+
+  // init
+  renderCart();
+})();

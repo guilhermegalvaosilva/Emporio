@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Checkout | BioVida</title>
-    <link rel="stylesheet" href="/frontend/style.css" />
+    <link rel="stylesheet" href="/style.css" />
 
     <style>
       :root {
@@ -12,6 +12,7 @@
         --muted: rgba(0, 0, 0, 0.62);
         --line: rgba(0, 0, 0, 0.1);
         --soft: #f5f5f5;
+        --card: #ffffff;
         --green: #1e7a34;
       }
       * {
@@ -22,17 +23,73 @@
         margin: 0;
         background: #fff;
         color: var(--ink);
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Arial;
       }
       a {
         color: inherit;
       }
 
+      /* ===== Header ===== */
+      .nav {
+        border-bottom: 1px solid var(--line);
+        background: #fff;
+      }
+      .nav__wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .nav__side {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .nav__link {
+        text-decoration: none;
+        font-weight: 900;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+      }
+      .brand {
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        line-height: 1.05;
+      }
+      .brand__emp {
+        font-weight: 900;
+        letter-spacing: 0.18em;
+        font-size: 12px;
+      }
+      .brand__name {
+        font-weight: 900;
+        letter-spacing: 0.02em;
+        font-size: 18px;
+      }
+      .brand__sub {
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        font-size: 10px;
+        color: rgba(0, 0, 0, 0.65);
+        margin-top: 4px;
+      }
+
+      /* ===== Page ===== */
       .page {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 32px 16px 90px;
+        padding: 28px 16px 80px;
       }
-
       .head {
         display: flex;
         align-items: flex-end;
@@ -46,6 +103,7 @@
         margin: 0;
         font-size: 26px;
         font-weight: 900;
+        letter-spacing: -0.02em;
       }
       .head p {
         margin: 6px 0 0;
@@ -53,11 +111,19 @@
         font-weight: 700;
         font-size: 13px;
       }
+      .back {
+        font-weight: 900;
+        text-decoration: none;
+        border: 1px solid var(--line);
+        padding: 10px 12px;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+      }
 
       .layout {
         display: grid;
-        grid-template-columns: 1.2fr 0.8fr;
-        gap: 18px;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 16px;
         align-items: start;
       }
       @media (max-width: 980px) {
@@ -68,23 +134,24 @@
 
       .panel {
         border: 1px solid var(--line);
-        background: #fff;
+        background: var(--card);
         padding: 16px;
       }
       .panel__title {
         margin: 0 0 12px;
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 900;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
       }
 
+      /* ===== Cart items ===== */
       .item {
         display: grid;
         grid-template-columns: 64px 1fr auto;
         gap: 12px;
         align-items: center;
-        padding: 12px 0;
+        padding: 14px 0;
         border-top: 1px solid var(--line);
       }
       .item:first-child {
@@ -120,8 +187,8 @@
       .qty {
         display: flex;
         gap: 8px;
-        justify-content: flex-end;
-        margin-top: 8px;
+        justify-content: flex-start;
+        margin-top: 10px;
       }
       .qty button {
         width: 34px;
@@ -138,19 +205,20 @@
       }
 
       .remove {
-        margin-top: 8px;
+        margin-top: 10px;
         border: 1px solid var(--line);
         background: #fff;
-        padding: 8px 10px;
+        padding: 10px 12px;
         font-weight: 900;
         cursor: pointer;
-        width: 100%;
+        width: fit-content;
       }
 
+      /* ===== Totals ===== */
       .totals {
         border-top: 1px solid var(--line);
-        margin-top: 12px;
-        padding-top: 12px;
+        margin-top: 14px;
+        padding-top: 14px;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -165,23 +233,26 @@
         color: var(--muted);
         font-weight: 800;
       }
-      .row .neg {
+      .neg {
         color: #b00020;
       }
 
+      /* ===== Form ===== */
       .form {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 12px;
       }
-      .form .full {
+      .full {
         grid-column: 1 / -1;
       }
 
       .field label {
         display: block;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 900;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
         color: rgba(0, 0, 0, 0.75);
         margin-bottom: 6px;
       }
@@ -194,9 +265,10 @@
         font-size: 14px;
         outline: 0;
         background: #fff;
+        font-weight: 700;
       }
       .field textarea {
-        min-height: 90px;
+        min-height: 92px;
         resize: vertical;
       }
 
@@ -207,6 +279,7 @@
         padding: 12px 14px;
         font-weight: 900;
         cursor: pointer;
+        letter-spacing: 0.04em;
       }
       .btn--primary {
         background: var(--ink);
@@ -235,124 +308,53 @@
         font-weight: 800;
       }
 
-      .loading {
-        opacity: 0.7;
-        pointer-events: none;
-      }
-
-      /* ✅ CUPOM */
-      .couponBox {
+      /* ===== PIX (QR) ===== */
+      .pixBox {
         border: 1px solid var(--line);
         padding: 12px;
+        margin-top: 10px;
         background: #fff;
       }
-      .couponTop {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        margin-bottom: 10px;
-      }
-      .couponHint {
-        font-size: 12px;
-        font-weight: 800;
-        color: var(--muted);
-      }
-      .couponRow {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 10px;
-        align-items: center;
-      }
-      @media (max-width: 420px) {
-        .couponRow {
-          grid-template-columns: 1fr;
-        }
-      }
-      .couponRow input {
-        height: 44px;
-        letter-spacing: 0.02em;
+      .pixTitle {
         font-weight: 900;
+        margin: 0 0 10px;
+        font-size: 12px;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
       }
-      .couponBtn {
-        height: 44px;
-        min-width: 120px;
-      }
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 10px;
-        border: 1px solid var(--line);
-        font-size: 12px;
-        font-weight: 900;
-      }
-      .badge--ok {
-        border-color: rgba(30, 122, 52, 0.35);
-        color: var(--green);
-        background: rgba(30, 122, 52, 0.06);
-      }
-      .badge--err {
-        border-color: rgba(176, 0, 32, 0.35);
-        color: #b00020;
-        background: rgba(176, 0, 32, 0.06);
-      }
-      .badge--info {
-        border-color: rgba(0, 0, 0, 0.12);
-        color: rgba(0, 0, 0, 0.72);
-        background: rgba(0, 0, 0, 0.03);
-      }
-
-      /* ✅ PIX BOX */
       .pixRow {
         display: grid;
-        grid-template-columns: 1fr 220px;
+        grid-template-columns: 1fr 240px;
         gap: 12px;
         align-items: start;
       }
-      @media (max-width: 520px) {
+      @media (max-width: 560px) {
         .pixRow {
           grid-template-columns: 1fr;
         }
       }
       .pixQr {
-        width: 220px;
-        height: 220px;
+        width: 240px;
+        height: 240px;
         border: 1px solid rgba(0, 0, 0, 0.1);
         background: #fff;
         object-fit: contain;
       }
       .pixMeta {
         color: rgba(0, 0, 0, 0.62);
-        line-height: 1.6;
+        line-height: 1.7;
+        font-weight: 800;
+        font-size: 12px;
       }
       .pixKeyLine {
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
         align-items: center;
-      }
-      .pixCopyRow {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 10px;
-      }
-      .mono {
-        font-family:
-          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-          "Liberation Mono", "Courier New", monospace;
-        font-size: 11px;
-        line-height: 1.5;
-        color: rgba(0, 0, 0, 0.75);
-        border: 1px solid rgba(0, 0, 0, 0.12);
-        padding: 10px;
-        background: #fff;
-        word-break: break-all;
+        margin-bottom: 10px;
       }
 
-      /* ✅ FOOTER PREMIUM */
+      /* ===== Footer ===== */
       .footer {
         background: #0b0c0f;
         color: rgba(255, 255, 255, 0.92);
@@ -361,182 +363,30 @@
       .footer__wrap {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 34px 16px 18px;
-      }
-
-      .footerTop {
+        padding: 22px 16px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 12px;
-        padding: 14px 14px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(255, 255, 255, 0.04);
-        margin-bottom: 18px;
-      }
-      @media (max-width: 860px) {
-        .footerTop {
-          flex-direction: column;
-          align-items: stretch;
-        }
-      }
-      .footerTop__left {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-      .footerTop__title {
-        margin: 0;
-        font-weight: 900;
-        letter-spacing: 0.02em;
-        font-size: 14px;
-      }
-      .footerTop__sub {
-        margin: 0;
-        color: rgba(255, 255, 255, 0.72);
-        font-weight: 700;
-        font-size: 12px;
-        line-height: 1.7;
-      }
-      .footerTop__actions {
-        display: flex;
-        gap: 10px;
         flex-wrap: wrap;
-        justify-content: flex-end;
       }
-      @media (max-width: 860px) {
-        .footerTop__actions {
-          justify-content: flex-start;
-          width: 100%;
-        }
-      }
-      .footerCta {
-        text-decoration: none;
-        font-weight: 900;
-        font-size: 12px;
-        padding: 10px 12px;
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        background: transparent;
-        color: rgba(255, 255, 255, 0.92);
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .footerCta--solid {
-        background: rgba(255, 255, 255, 0.92);
-        color: #0b0c0f;
-        border-color: rgba(255, 255, 255, 0.92);
-      }
-      .footerCta:hover {
-        opacity: 0.92;
-      }
-      .ico {
-        width: 16px;
-        height: 16px;
-        flex: 0 0 auto;
-        opacity: 0.95;
-      }
-
-      .footerBadges {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        padding: 10px 0 18px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-        margin-bottom: 18px;
-      }
-      .footerBadge {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 10px 12px;
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        background: rgba(255, 255, 255, 0.03);
-        font-weight: 900;
-        font-size: 12px;
-        letter-spacing: 0.02em;
-        color: rgba(255, 255, 255, 0.92);
-      }
-      .footerGrid {
-        display: grid;
-        grid-template-columns: 1.25fr 0.95fr 0.95fr;
-        gap: 18px;
-        align-items: start;
-      }
-      @media (max-width: 980px) {
-        .footerGrid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .footer__brand {
-        margin: 0 0 10px;
-        font-weight: 900;
-        font-size: 16px;
-        letter-spacing: 0.06em;
-      }
-      .footer__muted {
-        margin: 0;
-        color: rgba(255, 255, 255, 0.72);
-        font-weight: 700;
-        font-size: 12px;
-        line-height: 1.85;
-      }
-      .footer__title {
-        margin: 0 0 10px;
-        font-weight: 900;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        font-size: 12px;
-      }
-      .footer__links {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      .footer__link {
-        text-decoration: none;
-        font-weight: 900;
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.92);
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        padding: 10px 12px;
-        width: fit-content;
-        background: transparent;
-      }
-      .footer__link:hover {
-        opacity: 0.92;
-      }
-
-      .footerBottom {
-        margin-top: 18px;
-        padding-top: 14px;
-        border-top: 1px solid rgba(255, 255, 255, 0.12);
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .footerBottom small {
-        color: rgba(255, 255, 255, 0.6);
+      .footer small {
+        color: rgba(255, 255, 255, 0.62);
         font-weight: 700;
       }
-      .footerLegal {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        align-items: center;
-      }
-      .footerLegal a {
-        color: rgba(255, 255, 255, 0.7);
+      .footer a {
+        color: rgba(255, 255, 255, 0.92);
         text-decoration: none;
+        font-weight: 900;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      /* helper */
+      .hint {
+        font-size: 12px;
+        color: var(--muted);
         font-weight: 800;
-        font-size: 12px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-      }
-      .footerLegal a:hover {
-        opacity: 0.9;
+        margin-top: 6px;
       }
     </style>
   </head>
@@ -546,14 +396,10 @@
       <div class="nav__wrap">
         <nav class="nav__side nav__side--left">
           <a href="/index.html" class="nav__link">HOME</a>
-          <a href="/frontend/mais-vendidos.html" class="nav__link">PRODUTOS</a>
+          <a href="/mais-vendidos.html" class="nav__link">PRODUTOS</a>
         </nav>
 
-        <a
-          href="/frontend/index.html"
-          class="brand"
-          aria-label="Empório BioVida"
-        >
+        <a href="/index.html" class="brand" aria-label="Empório BioVida">
           <span class="brand__emp">EMPÓRIO</span>
           <span class="brand__name"
             ><span class="brand__bio">Bio</span
@@ -563,8 +409,8 @@
         </a>
 
         <nav class="nav__side nav__side--right">
-          <a href="/frontend/sobre.html" class="nav__link">SOBRE</a>
-          <a href="#" class="nav__link">CONTATO</a>
+          <a href="/sobre.html" class="nav__link">SOBRE</a>
+          <a href="#footer" class="nav__link">CONTATO</a>
         </nav>
       </div>
     </header>
@@ -573,22 +419,13 @@
       <div class="head">
         <div>
           <h1>Checkout</h1>
-          <p>Revise seu carrinho e finalize seu pedido.</p>
+          <p>Revise seu carrinho, preencha seus dados e pague via Pix.</p>
         </div>
-
-        <a
-          href="/frontend/mais-vendidos.html"
-          style="
-            font-weight: 900;
-            text-decoration: none;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            padding: 10px 12px;
-          "
-          >Voltar aos produtos</a
-        >
+        <a class="back" href="/mais-vendidos.html">VOLTAR AOS PRODUTOS</a>
       </div>
 
       <div class="layout">
+        <!-- ===== Carrinho ===== -->
         <section class="panel" aria-label="Resumo do carrinho">
           <h2 class="panel__title">Seu carrinho</h2>
           <div id="cartList"></div>
@@ -611,12 +448,14 @@
           </div>
         </section>
 
+        <!-- ===== Dados ===== -->
         <aside class="panel" aria-label="Dados do pedido">
-          <h2 class="panel__title">Seus dados</h2>
+          <h2 class="panel__title">Dados do cliente</h2>
 
           <form id="checkoutForm" class="form">
+            <!-- Identificação -->
             <div class="field full">
-              <label for="name">Nome</label>
+              <label for="name">Nome completo</label>
               <input
                 id="name"
                 name="name"
@@ -624,6 +463,23 @@
                 placeholder="Seu nome"
                 required
               />
+            </div>
+
+            <div class="field">
+              <label for="cpf">CPF</label>
+              <input
+                id="cpf"
+                name="cpf"
+                type="text"
+                placeholder="000.000.000-00"
+                inputmode="numeric"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="birth">Data de nascimento</label>
+              <input id="birth" name="birth" type="date" />
             </div>
 
             <div class="field full">
@@ -637,7 +493,7 @@
               />
             </div>
 
-            <div class="field">
+            <div class="field full">
               <label for="phone">WhatsApp</label>
               <input
                 id="phone"
@@ -648,6 +504,7 @@
               />
             </div>
 
+            <!-- Recebimento -->
             <div class="field">
               <label for="method">Recebimento</label>
               <select id="method" name="method" required>
@@ -656,18 +513,8 @@
               </select>
             </div>
 
-            <div class="field full">
-              <label for="address">Endereço (se entrega)</label>
-              <input
-                id="address"
-                name="address"
-                type="text"
-                placeholder="Rua, nº, bairro, cidade"
-              />
-            </div>
-
-            <div class="field full">
-              <label for="shippingZone">Região de entrega</label>
+            <div class="field">
+              <label for="shippingZone">Região</label>
               <select id="shippingZone" name="shippingZone">
                 <option value="Plano Piloto">Plano Piloto (Free)</option>
                 <option value="Asa Sul / Asa Norte">
@@ -681,31 +528,111 @@
               </select>
             </div>
 
-            <div class="field full">
-              <label for="payment">Pagamento</label>
-              <select id="payment" name="payment" required>
-                <option value="Pix (Manual)">Pix</option>
+            <!-- Endereço -->
+            <div class="field">
+              <label for="cep">CEP</label>
+              <input
+                id="cep"
+                name="cep"
+                type="text"
+                placeholder="00000-000"
+                inputmode="numeric"
+              />
+            </div>
+
+            <div class="field">
+              <label for="uf">UF</label>
+              <select id="uf" name="uf">
+                <option value="DF" selected>DF</option>
+                <option value="GO">GO</option>
+                <option value="SP">SP</option>
+                <option value="RJ">RJ</option>
+                <option value="MG">MG</option>
+                <option value="BA">BA</option>
+                <option value="PR">PR</option>
+                <option value="SC">SC</option>
+                <option value="RS">RS</option>
+                <option value="ES">ES</option>
+                <option value="PE">PE</option>
+                <option value="CE">CE</option>
+                <option value="PA">PA</option>
+                <option value="AM">AM</option>
+                <option value="MA">MA</option>
+                <option value="PB">PB</option>
+                <option value="RN">RN</option>
+                <option value="PI">PI</option>
+                <option value="AL">AL</option>
+                <option value="SE">SE</option>
+                <option value="MT">MT</option>
+                <option value="MS">MS</option>
+                <option value="TO">TO</option>
+                <option value="RO">RO</option>
+                <option value="RR">RR</option>
+                <option value="AP">AP</option>
+                <option value="AC">AC</option>
               </select>
+            </div>
 
-              <div
-                id="pixManualBox"
-                style="
-                  border: 1px solid rgba(0, 0, 0, 0.1);
-                  padding: 12px;
-                  margin-top: 10px;
-                  font-weight: 800;
-                  font-size: 12px;
-                  color: rgba(0, 0, 0, 0.75);
-                "
-              >
-                <div style="font-weight: 900; margin-bottom: 10px">
-                  Pix (QR Code)
-                </div>
+            <div class="field full">
+              <label for="street">Rua / Avenida</label>
+              <input
+                id="street"
+                name="street"
+                type="text"
+                placeholder="Ex.: Rua X, Av. Y"
+              />
+            </div>
 
+            <div class="field">
+              <label for="number">Número</label>
+              <input
+                id="number"
+                name="number"
+                type="text"
+                placeholder="Ex.: 123"
+              />
+            </div>
+
+            <div class="field">
+              <label for="complement">Complemento</label>
+              <input
+                id="complement"
+                name="complement"
+                type="text"
+                placeholder="Apto, bloco, lote..."
+              />
+            </div>
+
+            <div class="field full">
+              <label for="district">Bairro</label>
+              <input
+                id="district"
+                name="district"
+                type="text"
+                placeholder="Ex.: Asa Sul"
+              />
+            </div>
+
+            <div class="field full">
+              <label for="city">Cidade</label>
+              <input
+                id="city"
+                name="city"
+                type="text"
+                placeholder="Ex.: Brasília"
+                value="Brasília"
+              />
+            </div>
+
+            <!-- PIX -->
+            <div class="field full">
+              <label>Pagamento</label>
+              <div class="pixBox">
+                <p class="pixTitle">Pix (QR Code)</p>
                 <div class="pixRow">
                   <div>
-                    <div class="pixKeyLine" style="margin-bottom: 10px">
-                      <span>Chave Pix:</span>
+                    <div class="pixKeyLine">
+                      <span class="pixMeta">Chave Pix:</span>
                       <span id="pixKeyText" style="font-weight: 900"
                         >46792469874</span
                       >
@@ -718,47 +645,32 @@
                         Copiar chave
                       </button>
                     </div>
-
                     <div class="pixMeta">
-                      <div style="margin-bottom: 6px">
-                        Valor do pedido:
-                        <span id="pixAmountText" style="font-weight: 900"
-                          >R$ 0,00</span
-                        >
+                      Valor do pedido:
+                      <span id="pixAmountText" style="font-weight: 900"
+                        >R$ 0,00</span
+                      >
+                      <br />
+                      Escaneie o QR Code para pagar.
+                      <div class="hint">
+                        Depois clique em “Finalizar no WhatsApp” e envie o
+                        comprovante.
                       </div>
-                      <div>Escaneie o QR com o app do seu banco.</div>
-                    </div>
-
-                    <div class="pixCopyRow">
-                      <button class="btn" type="button" id="copyPixEMVBtn">
-                        Copiar Pix (copia e cola)
-                      </button>
-                    </div>
-
-                    <div
-                      id="pixEmvText"
-                      class="mono"
-                      style="margin-top: 10px; display: none"
-                    ></div>
-
-                    <div class="pixMeta" style="margin-top: 10px">
-                      Após o pagamento, envie o comprovante pelo WhatsApp para
-                      confirmarmos seu pedido.
                     </div>
                   </div>
-
                   <div>
                     <img
                       id="pixQrImg"
                       class="pixQr"
                       alt="QR Code do Pix"
-                      src=""
+                      src="/img/pix-static.png"
                     />
                   </div>
                 </div>
               </div>
             </div>
 
+            <!-- Cupom -->
             <div class="field full">
               <label for="coupon">Cupom</label>
               <div class="couponBox">
@@ -770,7 +682,6 @@
                     style="display: none"
                   ></div>
                 </div>
-
                 <div class="couponRow">
                   <input
                     id="coupon"
@@ -796,8 +707,8 @@
             </div>
 
             <div class="actions full">
-              <button class="btn btn--primary" id="payBtn" type="submit">
-                Pagar agora (WhatsApp)
+              <button class="btn btn--primary" type="submit">
+                Finalizar no WhatsApp
               </button>
               <button class="btn" type="button" id="clearCart">
                 Limpar carrinho
@@ -808,155 +719,33 @@
       </div>
     </main>
 
-    <!-- ✅ FOOTER PREMIUM -->
-    <footer class="footer" aria-label="Rodapé">
+    <footer class="footer" id="footer" aria-label="Rodapé">
       <div class="footer__wrap">
-        <div class="footerTop" aria-label="Atalho de atendimento">
-          <div class="footerTop__left">
-            <p class="footerTop__title">Precisa de ajuda para finalizar?</p>
-            <p class="footerTop__sub">
-              Atendimento rápido no WhatsApp e confirmação do pedido após o Pix.
-            </p>
-          </div>
-
-          <div class="footerTop__actions">
-            <a
-              class="footerCta footerCta--solid"
-              href="https://wa.me/5561995289436"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <svg class="ico" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M21 16.5a4.5 4.5 0 0 1-4.5 4.5H8l-5 2 2-5V7.5A4.5 4.5 0 0 1 9.5 3H16.5A4.5 4.5 0 0 1 21 7.5v9Z"
-                  stroke="currentColor"
-                  stroke-width="2"
-                />
-              </svg>
-              Chamar no WhatsApp
-            </a>
-
-            <a class="footerCta" href="/frontend/mais-vendidos.html">
-              <svg class="ico" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M7 7h14v14H7V7Z"
-                  stroke="currentColor"
-                  stroke-width="2"
-                />
-                <path
-                  d="M3 3h14v14H3V3Z"
-                  stroke="currentColor"
-                  stroke-width="2"
-                />
-              </svg>
-              Ver produtos
-            </a>
-          </div>
-        </div>
-
-        <div class="footerBadges" aria-label="Benefícios">
-          <div class="footerBadge">
-            <svg class="ico" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M7 10.5 11 14.5 17 8.5"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-              <path
-                d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-            </svg>
-            Pix (QR + Copia e Cola)
-          </div>
-
-          <div class="footerBadge">
-            <svg class="ico" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M3 7h14l4 5v5H5l-2-5V7Z"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-              <path
-                d="M7 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-              <path d="M3 7V4h4" stroke="currentColor" stroke-width="2" />
-            </svg>
-            Entrega em Brasília-DF
-          </div>
-
-          <div class="footerBadge">
-            <svg class="ico" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 21s8-4.5 8-11a8 8 0 0 0-16 0c0 6.5 8 11 8 11Z"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-              <path
-                d="M8.5 11.5c3 0 4-3 7-3"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-            </svg>
-            Produtos naturais selecionados
-          </div>
-        </div>
-
-        <div class="footerGrid">
-          <div>
-            <p class="footer__brand">Empório BioVida</p>
-            <p class="footer__muted" id="footerInfo"></p>
-          </div>
-
-          <div>
-            <p class="footer__title">Navegação</p>
-            <div class="footer__links">
-              <a class="footer__link" href="/frontend/index.html">Home</a>
-              <a class="footer__link" href="/frontend/mais-vendidos.html"
-                >Produtos</a
-              >
-              <a class="footer__link" href="/frontend/sobre.html">Sobre</a>
-            </div>
-          </div>
-
-          <div>
-            <p class="footer__title">Informações</p>
-            <p class="footer__muted">
-              Pagamento via Pix (QR Code). Após pagar, envie o comprovante no
-              WhatsApp.<br />
-              Frete: grátis nas regiões listadas e R$ 20,00 para “Outras
-              regiões”.
-            </p>
-          </div>
-        </div>
-
-        <div class="footerBottom">
-          <small
-            >© <span id="footerYear"></span> Empório BioVida. Todos os direitos
-            reservados.</small
-          >
-          <div class="footerLegal">
-            <a href="#" aria-label="Política de Privacidade">Privacidade</a>
-            <a href="#" aria-label="Termos de Uso">Termos</a>
-          </div>
-        </div>
+        <small
+          >© <span id="footerYear"></span> Empório BioVida. Todos os direitos
+          reservados.</small
+        >
+        <small
+          >Atendimento:
+          <a
+            href="https://wa.me/5561995289436"
+            target="_blank"
+            rel="noopener noreferrer"
+            >WhatsApp</a
+          ></small
+        >
       </div>
     </footer>
 
     <script>
+      // =========================
+      // CONFIG
+      // =========================
       const storageKey = "biovida_cart_v1";
       const STORE_WHATSAPP = "5561995289436";
       const PIX_KEY = "46792469874";
-
       const PIX_MERCHANT_NAME = "EMPORIO BIOVIDA";
       const PIX_MERCHANT_CITY = "BRASILIA";
-
-      // ✅ Footer editável (premium)
-      const FOOTER_ADDRESS_LINE = "Produtos naturais • Brasília-DF";
-      const FOOTER_HOURS = "Seg–Sáb: 09:00–19:00 • Dom: 10:00–14:00";
 
       const SHIPPING_TABLE = {
         "Plano Piloto": 0,
@@ -974,20 +763,43 @@
       const fmt = (n) =>
         n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
+      // =========================
+      // MASKS / HELPERS
+      // =========================
       function onlyDigits(v) {
         return (v || "").replace(/\D/g, "");
       }
+
       function maskBRPhone(v) {
         const d = onlyDigits(v).slice(0, 11);
         const ddd = d.slice(0, 2);
         const nine = d.slice(2, 3);
         const p1 = d.slice(3, 7);
         const p2 = d.slice(7, 11);
-
         if (d.length <= 2) return ddd ? `(${ddd}` : "";
         if (d.length <= 3) return `(${ddd}) ${nine}`;
         if (d.length <= 7) return `(${ddd}) ${nine}${p1 ? ` ${p1}` : ""}`;
         return `(${ddd}) ${nine} ${p1}-${p2}`;
+      }
+
+      function maskCEP(v) {
+        const d = onlyDigits(v).slice(0, 8);
+        if (d.length <= 5) return d;
+        return `${d.slice(0, 5)}-${d.slice(5)}`;
+      }
+
+      function maskCPF(v) {
+        const d = onlyDigits(v).slice(0, 11);
+        if (d.length <= 3) return d;
+        if (d.length <= 6) return `${d.slice(0, 3)}.${d.slice(3)}`;
+        if (d.length <= 9)
+          return `${d.slice(0, 3)}.${d.slice(3, 6)}.${d.slice(6)}`;
+        return `${d.slice(0, 3)}.${d.slice(3, 6)}.${d.slice(6, 9)}-${d.slice(9)}`;
+      }
+
+      function openWhatsApp(text) {
+        const url = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(text)}`;
+        window.open(url, "_blank", "noopener,noreferrer");
       }
 
       function lineItemsText(items) {
@@ -996,11 +808,9 @@
           .join("\n");
       }
 
-      function openWhatsApp(text) {
-        const url = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(text)}`;
-        window.open(url, "_blank", "noopener,noreferrer");
-      }
-
+      // =========================
+      // CART STORAGE
+      // =========================
       const loadCart = () => {
         try {
           return JSON.parse(localStorage.getItem(storageKey)) || {};
@@ -1010,9 +820,11 @@
       };
       const saveCart = (cart) =>
         localStorage.setItem(storageKey, JSON.stringify(cart));
-
       let cart = loadCart();
 
+      // =========================
+      // DOM
+      // =========================
       const cartList = document.getElementById("cartList");
       const subtotalEl = document.getElementById("subtotal");
       const shippingEl = document.getElementById("shipping");
@@ -1021,7 +833,6 @@
 
       const form = document.getElementById("checkoutForm");
       const methodEl = document.getElementById("method");
-      const addressEl = document.getElementById("address");
       const zoneEl = document.getElementById("shippingZone");
 
       const couponInput = document.getElementById("coupon");
@@ -1029,38 +840,35 @@
       const couponMsg = document.getElementById("couponMsg");
 
       const clearCartBtn = document.getElementById("clearCart");
-      const payBtn = document.getElementById("payBtn");
+
       const phoneEl = document.getElementById("phone");
+      const cpfEl = document.getElementById("cpf");
+      const cepEl = document.getElementById("cep");
 
       const pixKeyText = document.getElementById("pixKeyText");
       const copyPixKeyBtn = document.getElementById("copyPixKeyBtn");
       const pixAmountText = document.getElementById("pixAmountText");
       const pixQrImg = document.getElementById("pixQrImg");
-      const copyPixEMVBtn = document.getElementById("copyPixEMVBtn");
-      const pixEmvText = document.getElementById("pixEmvText");
 
-      // Footer premium info
+      // footer year
       const footerYear = document.getElementById("footerYear");
       if (footerYear) footerYear.textContent = new Date().getFullYear();
 
-      const footerInfo = document.getElementById("footerInfo");
-      if (footerInfo) {
-        footerInfo.innerHTML =
-          `${FOOTER_ADDRESS_LINE}<br />` +
-          `Atendimento via WhatsApp: ` +
-          `<a href="https://wa.me/${STORE_WHATSAPP}" style="font-weight: 900; text-decoration: none; color: rgba(255,255,255,0.92);">(61) 99528-9436</a><br />` +
-          `<span style="color: rgba(255,255,255,0.68);">Horário: ${FOOTER_HOURS}</span>`;
-      }
-
       if (pixKeyText) pixKeyText.textContent = PIX_KEY;
 
-      phoneEl.addEventListener("input", (e) => {
-        const start = e.target.selectionStart;
-        const before = e.target.value;
-        e.target.value = maskBRPhone(e.target.value);
-        const diff = e.target.value.length - before.length;
-        e.target.setSelectionRange((start || 0) + diff, (start || 0) + diff);
-      });
+      // masks
+      phoneEl.addEventListener(
+        "input",
+        (e) => (e.target.value = maskBRPhone(e.target.value)),
+      );
+      cpfEl.addEventListener(
+        "input",
+        (e) => (e.target.value = maskCPF(e.target.value)),
+      );
+      cepEl.addEventListener(
+        "input",
+        (e) => (e.target.value = maskCEP(e.target.value)),
+      );
 
       copyPixKeyBtn.addEventListener("click", async () => {
         try {
@@ -1071,7 +879,9 @@
         }
       });
 
-      // Cupom
+      // =========================
+      // COUPON
+      // =========================
       let appliedCoupon = "";
       let couponApplied = false;
 
@@ -1083,10 +893,12 @@
         } else {
           couponMsg.style.display = "inline-flex";
           couponMsg.textContent = text;
-
-          if (type === "ok") couponMsg.className = "badge badge--ok";
-          else if (type === "err") couponMsg.className = "badge badge--err";
-          else couponMsg.className = "badge badge--info";
+          couponMsg.className =
+            type === "ok"
+              ? "badge badge--ok"
+              : type === "err"
+                ? "badge badge--err"
+                : "badge badge--info";
         }
 
         if (couponApplied && appliedCoupon) {
@@ -1101,7 +913,6 @@
 
       function tryApplyCoupon() {
         const code = (couponInput.value || "").toUpperCase().trim();
-
         if (!code) {
           couponApplied = false;
           appliedCoupon = "";
@@ -1116,7 +927,6 @@
           render();
           return;
         }
-
         couponApplied = true;
         appliedCoupon = code;
         setCouponUI("ok", `Aplicado: ${code}`);
@@ -1131,21 +941,20 @@
         render();
       }
 
-      applyCouponBtn.addEventListener("click", () => {
-        if (couponApplied) removeCoupon();
-        else tryApplyCoupon();
-      });
-
+      applyCouponBtn.addEventListener("click", () =>
+        couponApplied ? removeCoupon() : tryApplyCoupon(),
+      );
       couponInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           e.preventDefault();
-          if (couponApplied) removeCoupon();
-          else tryApplyCoupon();
+          couponApplied ? removeCoupon() : tryApplyCoupon();
         }
       });
-
       setCouponUI("", "");
 
+      // =========================
+      // TOTALS
+      // =========================
       function subtotal() {
         return Object.values(cart).reduce(
           (acc, it) => acc + it.qty * it.price,
@@ -1158,22 +967,16 @@
       }
       function discountValue(sub, ship) {
         if (!couponApplied || !appliedCoupon) return 0;
-        const code = appliedCoupon.toUpperCase().trim();
-        if (!COUPONS[code]) return 0;
-
-        const c = COUPONS[code];
+        const c = COUPONS[appliedCoupon];
+        if (!c) return 0;
         if (c.type === "percent") return (sub * c.value) / 100;
         if (c.type === "shipping") return ship;
         return 0;
       }
-      function total() {
-        const sub = subtotal();
-        const ship = shippingCost();
-        const disc = discountValue(sub, ship);
-        return Math.max(0, sub + ship - disc);
-      }
 
-      // PIX EMV + QR
+      // =========================
+      // PIX EMV -> QR com valor
+      // =========================
       function pad2(n) {
         return String(n).padStart(2, "0");
       }
@@ -1194,25 +997,25 @@
         for (let i = 0; i < str.length; i++) {
           crc ^= str.charCodeAt(i) << 8;
           for (let j = 0; j < 8; j++) {
-            if (crc & 0x8000) crc = (crc << 1) ^ 0x1021;
-            else crc = crc << 1;
+            crc = crc & 0x8000 ? (crc << 1) ^ 0x1021 : crc << 1;
             crc &= 0xffff;
           }
         }
         return crc.toString(16).toUpperCase().padStart(4, "0");
       }
+
       function buildPixEMV({ key, merchantName, merchantCity, amount, txid }) {
         const name = sanitizePixText(merchantName, 25) || "RECEBEDOR";
         const city = sanitizePixText(merchantCity, 15) || "CIDADE";
         const amt = Number(amount || 0).toFixed(2);
 
-        const gui = emvField("00", "BR.GOV.BCB.PIX");
-        const k = emvField("01", key);
-        const mai = emvField("26", gui + k);
-
+        const mai = emvField(
+          "26",
+          emvField("00", "BR.GOV.BCB.PIX") + emvField("01", key),
+        );
         const mcc = emvField("52", "0000");
         const currency = emvField("53", "986");
-        const amountField = amount > 0 ? emvField("54", amt) : "";
+        const amountField = Number(amount) > 0 ? emvField("54", amt) : "";
         const country = emvField("58", "BR");
         const mName = emvField("59", name);
         const mCity = emvField("60", city);
@@ -1234,16 +1037,13 @@
           addData +
           "6304";
 
-        const crc = crc16ccitt(payloadNoCrc);
-        return payloadNoCrc + crc;
+        return payloadNoCrc + crc16ccitt(payloadNoCrc);
       }
-
-      let currentPixEMV = "";
 
       function updatePixQR(totalValue, txid) {
         if (pixAmountText) pixAmountText.textContent = fmt(totalValue);
 
-        currentPixEMV = buildPixEMV({
+        const emv = buildPixEMV({
           key: PIX_KEY,
           merchantName: PIX_MERCHANT_NAME,
           merchantCity: PIX_MERCHANT_CITY,
@@ -1252,24 +1052,15 @@
         });
 
         const url =
-          "https://chart.googleapis.com/chart?cht=qr&chs=220x220&chl=" +
-          encodeURIComponent(currentPixEMV);
+          "https://chart.googleapis.com/chart?cht=qr&chs=240x240&chl=" +
+          encodeURIComponent(emv);
 
         if (pixQrImg) pixQrImg.src = url;
-        if (pixEmvText) pixEmvText.textContent = currentPixEMV;
       }
 
-      copyPixEMVBtn.addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(currentPixEMV || PIX_KEY);
-          alert("Pix (copia e cola) copiado!");
-          if (pixEmvText) pixEmvText.style.display = "block";
-        } catch {
-          alert("Não foi possível copiar automaticamente.");
-          if (pixEmvText) pixEmvText.style.display = "block";
-        }
-      });
-
+      // =========================
+      // RENDER
+      // =========================
       function render() {
         const items = Object.values(cart);
 
@@ -1291,13 +1082,11 @@
             <div>
               <p class="item__name">${it.name}</p>
               <p class="item__meta">${it.id} • ${fmt(it.price)} cada</p>
-
               <div class="qty">
                 <button type="button" data-dec="${it.id}">−</button>
                 <span>${it.qty}</span>
                 <button type="button" data-inc="${it.id}">+</button>
               </div>
-
               <button class="remove" type="button" data-rem="${it.id}">Remover</button>
             </div>
             <div class="item__right">
@@ -1308,22 +1097,9 @@
           )
           .join("");
 
-        const sub = Object.values(cart).reduce(
-          (acc, it) => acc + it.qty * it.price,
-          0,
-        );
-        const ship =
-          methodEl.value === "Retirada"
-            ? 0
-            : (SHIPPING_TABLE[zoneEl.value] ?? 0);
-        const disc = (() => {
-          if (!couponApplied || !appliedCoupon) return 0;
-          const c = COUPONS[appliedCoupon];
-          if (!c) return 0;
-          if (c.type === "percent") return (sub * c.value) / 100;
-          if (c.type === "shipping") return ship;
-          return 0;
-        })();
+        const sub = subtotal();
+        const ship = shippingCost();
+        const disc = discountValue(sub, ship);
         const tot = Math.max(0, sub + ship - disc);
 
         subtotalEl.textContent = fmt(sub);
@@ -1335,11 +1111,10 @@
       }
 
       function inc(id) {
-        if (cart[id]) {
-          cart[id].qty += 1;
-          saveCart(cart);
-          render();
-        }
+        if (!cart[id]) return;
+        cart[id].qty += 1;
+        saveCart(cart);
+        render();
       }
       function dec(id) {
         if (!cart[id]) return;
@@ -1349,11 +1124,10 @@
         render();
       }
       function rem(id) {
-        if (cart[id]) {
-          delete cart[id];
-          saveCart(cart);
-          render();
-        }
+        if (!cart[id]) return;
+        delete cart[id];
+        saveCart(cart);
+        render();
       }
 
       cartList.addEventListener("click", (e) => {
@@ -1367,10 +1141,24 @@
 
       methodEl.addEventListener("change", () => {
         const isDelivery = methodEl.value === "Entrega";
-        addressEl.disabled = !isDelivery;
+        // habilita/obriga endereço só se entrega
+        const required = isDelivery;
+
+        ["cep", "street", "number", "district", "city"].forEach((id) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.disabled = !isDelivery;
+          el.required = required;
+          if (!isDelivery) el.value = "";
+        });
+
+        document.getElementById("complement").disabled = !isDelivery;
+        document.getElementById("uf").disabled = !isDelivery;
+
         zoneEl.disabled = !isDelivery;
         render();
       });
+
       zoneEl.addEventListener("change", render);
 
       clearCartBtn.addEventListener("click", () => {
@@ -1379,9 +1167,106 @@
         render();
       });
 
+      // =========================
+      // SUBMIT -> WhatsApp
+      // =========================
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const items = Object.values(cart);
+        if (items.length === 0) {
+          alert("Seu carrinho está vazio.");
+          return;
+        }
+
+        const get = (id) => (document.getElementById(id)?.value || "").trim();
+
+        const name = get("name");
+        const cpf = get("cpf");
+        const birth = get("birth");
+        const email = get("email");
+        const phone = get("phone");
+
+        const method = methodEl.value;
+        const zone = zoneEl.value;
+
+        const cep = get("cep");
+        const uf = get("uf");
+        const street = get("street");
+        const number = get("number");
+        const complement = get("complement");
+        const district = get("district");
+        const city = get("city");
+
+        const notes = get("notes");
+
+        const sub = subtotal();
+        const ship = shippingCost();
+        const disc = discountValue(sub, ship);
+        const tot = Math.max(0, sub + ship - disc);
+
+        const couponText =
+          couponApplied && appliedCoupon ? `Cupom: ${appliedCoupon}\n` : "";
+
+        const addressText =
+          method === "Entrega"
+            ? `Endereço:
+• CEP: ${cep}
+• Rua: ${street}, Nº ${number}${complement ? `, ${complement}` : ""}
+• Bairro: ${district}
+• Cidade/UF: ${city} - ${uf}
+• Região: ${zone}`
+            : "Retirada na loja";
+
+        const msg = `Olá! Quero finalizar meu pedido na BioVida.
+
+Cliente:
+• Nome: ${name}
+• CPF: ${cpf}
+• Nascimento: ${birth || "-"}
+• Email: ${email}
+• WhatsApp: ${phone}
+
+Pedido:
+${lineItemsText(items)}
+
+Resumo:
+• Subtotal: ${fmt(sub)}
+• Frete: ${fmt(ship)}
+• Desconto: - ${fmt(disc)}
+• Total: ${fmt(tot)}
+${couponText}
+Recebimento: ${method}
+
+${addressText}
+
+Observações:
+${notes || "-"}
+
+Pix:
+• Chave: ${PIX_KEY}
+
+Vou enviar o comprovante após o pagamento.`;
+
+        openWhatsApp(msg);
+      });
+
       // init
-      addressEl.disabled = false;
+      // no início assume Entrega habilitado
       zoneEl.disabled = false;
+      [
+        "cep",
+        "street",
+        "number",
+        "district",
+        "city",
+        "complement",
+        "uf",
+      ].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.disabled = false;
+      });
+
       render();
     </script>
   </body>
